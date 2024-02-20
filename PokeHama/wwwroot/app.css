@@ -8,6 +8,7 @@ html, body {
 
 .text-white { color: #fff; }
 .dark-bg { background-color: #424242; }
+.darker-bg { background-color: #303030; }
 
 .pixelify {
     font-family: 'Pixelify Sans', sans-serif!important;
@@ -26,7 +27,7 @@ html, body {
 }
 
 .hoverable:hover {
-    transform: scale(1.1) translate(-50%, -50%);
+    transform: scale3d(1.1, 1.15, 1.05) translate(-50%, -50%);
     cursor: pointer;
     position: relative;
     top: 50%; left: 50%;

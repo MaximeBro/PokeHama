@@ -1,5 +1,7 @@
 <div style="width: 100%; height: 100%; position: relative!important;">
-    <MudImage Class="pixel-rendered hoverable centered" Src="@Url" Style="width: 320px; height: auto;"/>
+    <MudLink Href="@($"/overview/{Url.Substring(Url.Length - 5).Replace(".png", string.Empty)}")">
+        <MudImage Class="pixel-rendered hoverable centered" Src="@Url" Style="width: 320px; height: auto;"/>
+    </MudLink>
 </div>
 
 @code {

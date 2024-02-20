@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\maxime.brochard\\source\\repos\\PokeHama\\PokeHama\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PokeHama.bundle.scp.css",
+      "PackagePath": "staticwebassets\\PokeHama.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\maxime.brochard\\source\\repos\\PokeHama\\PokeHama\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\maxime.brochard\\source\\repos\\PokeHama\\PokeHama\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\maxime.brochard\\source\\repos\\PokeHama\\PokeHama\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\maxime.brochard\\source\\repos\\PokeHama\\PokeHama\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PokeHama.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.PokeHama.props",
+      "PackagePath": "build\\PokeHama.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.PokeHama.props",
+      "PackagePath": "buildMultiTargeting\\PokeHama.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.PokeHama.props",
+      "PackagePath": "buildTransitive\\PokeHama.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

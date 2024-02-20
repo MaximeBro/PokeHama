@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "Zfozp+ws5LuVn85+eiG5H4dYSkvt/8b1Al/vwDvGpprz9L+7gYGWhSYKHTpuk/Rl7THj+0C0Zveif1n0mtEPlw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\maxime.brochard\\source\\repos\\PokeHama\\PokeHama\\PokeHama.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.2\\microsoft.aspnetcore.authorization.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.aspnetcore.components\\8.0.2\\microsoft.aspnetcore.components.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\8.0.2\\microsoft.aspnetcore.components.analyzers.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\8.0.2\\microsoft.aspnetcore.components.forms.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.aspnetcore.components.web\\8.0.2\\microsoft.aspnetcore.components.web.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.aspnetcore.metadata\\8.0.2\\microsoft.aspnetcore.metadata.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.localization\\8.0.2\\microsoft.extensions.localization.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.localization.abstractions\\8.0.2\\microsoft.extensions.localization.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.options\\8.0.2\\microsoft.extensions.options.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\microsoft.jsinterop\\8.0.2\\microsoft.jsinterop.8.0.2.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\mudblazor\\6.16.0\\mudblazor.6.16.0.nupkg.sha512",
+    "C:\\Users\\maxime.brochard\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

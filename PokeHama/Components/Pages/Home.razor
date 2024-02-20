@@ -2,13 +2,24 @@
 
 <PageTitle>PokéHama</PageTitle>
 
-<MudContainer Fixed Style="width: 100vw; height: 100vh;">
-    <MudGrid Justify="Justify.Center" Style="height: 100%;">
-        <MudItem xs="12" Style="height: 100%;">
-            <MudStack Class="my-auto" Row="false" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudIcon Icon="@Icons.Home"/>
-            </MudStack>
-        </MudItem>
-    </MudGrid>
-    
-</MudContainer>
+<section class="dark-bg absolute" style="min-height: 100vh; width: 100%;">
+    <MudContainer Class="pt-3">
+        <MudText Class="text-white pixelify" Typo="Typo.h1" Align="Align.Center" GutterBottom>PokéHama</MudText>
+        <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center" GutterBottom>Choose your pokemon !</MudText>
+        <MudStack Justify="Justify.Center">
+            <MudDivider Class="my-16 mx-auto" Light="false" Style="max-width: 700px;"/>
+        </MudStack>
+        
+        <MudGrid Justify="Justify.Center">
+            @foreach (var pokemon in _pokemons)
+            {
+                <MudItem xs="12" sm="4" md="4" lg="4" xl="3">
+                    <Mosaic Url="@pokemon" />
+                </MudItem>
+            }
+        </MudGrid>
+        <MudStack Row Style="height: 500px;">
+            
+        </MudStack>
+    </MudContainer>
+</section>

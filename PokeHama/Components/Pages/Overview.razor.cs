@@ -1,6 +1,11 @@
-using System.Drawing;
+using System.Globalization;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using MudBlazor;
+using PokeHama.Extensions;
 using SkiaSharp;
+using Color = System.Drawing.Color;
 
 namespace PokeHama.Components.Pages;
 
@@ -8,17 +13,20 @@ public partial class Overview
 {
 	[Parameter]
 	public int Id { get; set; }
-	
-	private static readonly string _default_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/";
 
 	private readonly Dictionary<int, KeyValuePair<int, string>> _pixelMap = new ();
 	private readonly List<string> _pixels = new();
+	private List<string> _palette = new();
 	private SKBitmap _image = null!;
+	private string _name = string.Empty;
+
+	private bool _toggleGrid = true;
+	private string _gridStyle => _toggleGrid ? "border: thin solid #424242;" : string.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
 		var client = new HttpClient();
-		var stream = await client.GetStreamAsync($"{_default_url}{Id}.png");
+		var stream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
 		var ms = new MemoryStream();
 		await stream.CopyToAsync(ms);
 		ms.Position = 0;
@@ -32,7 +40,40 @@ public partial class Overview
 				int g = pixel.Green;
 				int b = pixel.Blue;
 				var color = Color.FromArgb(r, g, b);
-				_pixels.Add($"{color.R:X2}{color.G:X2}{color.B:X2}");
+				_pixels.Add($"#{color.R:X2}{color.G:X2}{color.B:X2}");
+			}
+		}
+
+		_palette = _pixels.Distinct().ToList();
+		await GetNameAsync(client);
+	}
+
+	public async Task CopyToClipboardAsync(string color)
+	{
+		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", color);
+		Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+		Snackbar.Configuration.PreventDuplicates = false;
+		Snackbar.Configuration.MaxDisplayedSnackbars = Int32.MaxValue;
+		Snackbar.Configuration.VisibleStateDuration = 1500;
+		Snackbar.Add($"[{color}] Couleur enregistrée dans le presse papier.", Severity.Info);
+	}
+
+	public async Task GetNameAsync(HttpClient client)
+	{
+		var request = new HttpRequestMessage(HttpMethod.Get, $"{Hardcoded.SpeciesUrl}{Id}");
+		var response = await client.SendAsync(request);
+		var content = await response.Content.ReadAsStringAsync();
+		var doc = JsonDocument.Parse(content);
+		var names = doc.RootElement.GetProperty("names");
+
+		foreach (var name in names.EnumerateArray())
+		{
+			var language = name.GetProperty("language").GetProperty("name").GetString();
+			if (language == "fr")
+			{
+				var pokemonName = name.GetProperty("name").GetString() ?? string.Empty;
+				_name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(pokemonName.ToLower());
+				break;
 			}
 		}
 	}

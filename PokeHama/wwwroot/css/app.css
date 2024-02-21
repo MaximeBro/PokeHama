@@ -1,0 +1,65 @@
+/* FONTS */
+@import 'https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap';
+/* FONTS */
+
+* { outline: none!important; }
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.text-white { color: #fff!important; }
+.text-yellow { color: #FF9800!important; }
+
+.yellow-bg { background-color: #FF9800!important; }
+.light-bg { background-color: #545454; }
+.dark-bg { background-color: #424242; }
+.darker-bg { background-color: #303030; }
+
+.white-all * { color: #fff!important; }
+
+.pixelify, .pixelify * {
+    font-family: 'Pixelify Sans', sans-serif!important;
+    font-weight: 300!important;
+}
+
+.pixel-rendered { image-rendering: pixelated; }
+
+.scale5 { transform: scale(5); }
+.scale10 { transform: scale(10); }
+
+.absolute { position: absolute!important; }
+
+.centered {
+    position: relative;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nav-menu {
+    padding: 0!important;
+}
+
+.nav-menu .nav-menu-item:hover {
+    background-color: rgba(0, 0, 0, .15)!important;
+    border-radius: 4px;
+}
+
+.scale-up {
+    transition: ease 1.5s;
+    transform: scale3d(1.1, 1.15, 1.05) translate(-50%, -50%);
+    cursor: pointer;
+    position: relative;
+    top: 50%; left: 50%;
+}
+.scale-down {
+    transform: scale(0.8) translate(-50%, -50%);
+}
+.pokemon-item { transition: ease .5s; }
+
+td { transition: ease .2s; }
+td:hover { 
+    transform: scale(2.5);
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.06), 0 8px 10px 1px rgba(0,0,0,.042), 0 3px 14px 2px rgba(0,0,0,.036)!important;
+    cursor: pointer;
+}

@@ -1,31 +1,67 @@
 @page "/overview/{Id:int}"
+@inject ISnackbar Snackbar
+@inject IJSRuntime JsRuntime
 
 <PageTitle>PokéHama</PageTitle>
 
 <section class="dark-bg" style="min-height: 100vh; width: 100%;">
-    <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-12">
-        @if (_image is null)
-        {
-            return;
-        }
-        <MudStack Row Justify="Justify.Center">
-            <table style="border-collapse: collapse;">
-                <tbody>
-                @{
-                int i = 0;
-                for (int y = 0; y < _image.Height; y++)
-                {
-                <tr>
-                    @for (int x = 0; x < _image.Width; x++, i++)
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pb-12">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="2" Class="dark-bg">
+                <MudGrid Class="pt-16" Justify="Justify.Center">
+                    @foreach (var color in _palette)
                     {
-                        <td class="pa-0 ma-0" style="@($"border: thin solid #424242; background-color: #{_pixels[i]}; width: 25px!important; height: 25px!important;")">
-                        </td>
+                        <MudTooltip Text="@($"{color}")" Arrow Placement="Placement.Top">
+                            <MudItem Class="ma-1" xs="2">
+                                <MudPaper Class="pa-10" Elevation="10" Style="@($"background-color: {color};")" Width="100%" Height="100%">
+                                    <MudIconButton Class="absolute" Icon="@Icons.ContentCopy" DisableElevation OnClick="@(async () => await CopyToClipboardAsync(color))"
+                                                   Style="@($"color: {(color == "#000000" ? "#424242" : "rgba(0, 0, 0, .5)")}!important;")"/>
+                                </MudPaper>
+                            </MudItem>
+                        </MudTooltip>
                     }
-                </tr>
+                </MudGrid>
+                <MudStack Class="mt-8 pt-12 px-2" Row="false" Justify="Justify.Center">
+                    <MudText Class="text-white pixelify ml-4 mb-n2" Typo="Typo.h6">Options</MudText>
+                    <MudStack Class="pa-2 mud-elevation-10 rounded" Row="false" Justify="Justify.Center">
+                        <MudSwitch T="bool" @bind-Value="_toggleGrid" Class="text-white ml-2" Label="Grille" ThumbIcon="@(_toggleGrid ? Icons.GridOn : Icons.GridOff)"
+                                   ThumbIconColor="@(_toggleGrid ? Color.Info : Color.Dark)" Size="Size.Large" />
+                    </MudStack>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="8">
+                @if (_image is null)
+                {
+                    return;
                 }
-                }
-                </tbody>
-            </table>
-        </MudStack>
+                <MudStack Class="pt-4" Row Justify="Justify.Center">
+                    <MudText Class="text-white pixelify" Align="Align.Center" Typo="Typo.h3">@_name</MudText>
+                </MudStack>
+                <MudStack Row Justify="Justify.Center">
+                    <MudPaper Elevation="25">
+                        <table style="border-collapse: collapse;">
+                            <tbody>
+                            @{
+                                int i = 0;
+                                for (int y = 0; y < _image.Height; y++)
+                                {
+                                    <tr>
+                                        @for (int x = 0; x < _image.Width; x++, i++)
+                                        {
+                                            <td class="pa-0 ma-0" style="@($"{_gridStyle} background-color: {_pixels[i]}; width: 25px!important; height: 25px!important;")">
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </MudPaper>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="2">
+
+            </MudItem>
+        </MudGrid>
     </MudContainer>
 </section>

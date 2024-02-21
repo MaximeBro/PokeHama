@@ -1,20 +1,24 @@
+using PokeHama.Extensions;
+
 namespace PokeHama.Components.Pages;
 
 public partial class Home
 {
 	private List<string> _pokemons = new();
-	private int _amountToDisplay = 151;
-
-	private static readonly string _default_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/";
+	private bool _loading;
+	private int _amountToDisplay = 807;
 	
 	
 	protected override Task OnInitializedAsync()
 	{
+		_loading = true;
+		
 		for (int i = 1; i <= _amountToDisplay; i++)
 		{
-			_pokemons.Add($"{_default_url}{i}.png");
+			_pokemons.Add($"{Hardcoded.IconUrl}{i}.png");
 		}
 
+		_loading = false;
 		return Task.CompletedTask;
 	}
 }

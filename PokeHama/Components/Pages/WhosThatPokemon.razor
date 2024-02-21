@@ -1,0 +1,40 @@
+@page "/guess"
+
+<PageTitle>PokéHama</PageTitle>
+
+<section class="dark-bg" style="min-height: 100vh; width: 100%;">
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pb-12">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="2"></MudItem>
+            <MudItem xs="8">
+                @if (_image is null)
+                {
+                    return;
+                }
+                <MudStack Row="false">
+                    <MudText Class="pixelify" Color="Color.Warning" Typo="Typo.h1" GutterBottom Align="Align.Center">Who's that pokemon ?</MudText>
+                </MudStack>
+                <MudStack Row Justify="Justify.Center">
+                    <table style="border-collapse: collapse;">
+                        <tbody>
+                        @{
+                            int i = 0;
+                            for (int y = 0; y < _image.Height; y++)
+                            {
+                                <tr>
+                                    @for (int x = 0; x < _image.Width; x++, i++)
+                                    {
+                                        <td class="pa-0 ma-0" style="@($"border: thin solid #424242; background-color: {_colors[i]}; width: 25px!important; height: 25px!important;")">
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="2"></MudItem>
+        </MudGrid>
+    </MudContainer>
+</section>

@@ -62,4 +62,5 @@ td:hover {
     transform: scale(2.5);
     box-shadow: 0 5px 5px -3px rgba(0,0,0,.06), 0 8px 10px 1px rgba(0,0,0,.042), 0 3px 14px 2px rgba(0,0,0,.036)!important;
     cursor: pointer;
+    border:none!important;
 }

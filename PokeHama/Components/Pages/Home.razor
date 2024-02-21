@@ -23,7 +23,7 @@
             else
             {
                 <MudGrid Class="mt-4" Justify="Justify.Center">
-                    @foreach (var pokemon in _pokemons)
+                    @foreach (var pokemon in _filtered)
                     {
                         <MudItem id="pokemon-grid" xs="12" sm="4" md="4" lg="4" xl="3">
                             <Mosaic Url="@pokemon"/>
@@ -40,7 +40,7 @@
             <MudStack Row="false" Justify="Justify.Center">
                 <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center">Paramètres</MudText>
                 <MudStack Class="px-16" Row>
-                    <MudSlider T="int"  @bind-Value="_amountToDisplay" Class="text-white pixelify" Min="1" Max="807" Color="Color.Warning" Step="1" ValueLabel>
+                    <MudSlider T="int" @bind-Value="AmoutToDisplay" Class="text-white pixelify" Min="1" Max="807" Color="Color.Warning" Step="3" ValueLabel>
                         Pokémons
                     </MudSlider> 
                 </MudStack>

@@ -2,6 +2,16 @@
 
 <PageTitle>PokéHama</PageTitle>
 
+<MudOverlay Class="py-16" @bind-Visible="_successOver" DarkBackground LockScroll="false" ZIndex="10" Style="align-items: flex-start; margin-top: 64px;">
+    <MudText Class="pixelify text-yellow mt-8" Style="font-weight: 900!important; backdrop-filter: blur(4px);" Typo="Typo.h1" Align="Align.Center">
+        Bravo ! Tu as réussi à deviner.
+    </MudText>
+    <MudStack Row Justify="Justify.Center">
+        <MudButton Class="px-auto pixelify" Variant="Variant.Filled" Color="Color.Dark" OnClick="@LeaveGame">Quitter</MudButton>
+        <MudButton Class="px-auto pixelify" Variant="Variant.Filled" Color="Color.Success" OnClick="@RefreshGame">Nouveau jeu</MudButton>
+    </MudStack>
+</MudOverlay>
+
 <section class="dark-bg" style="min-height: 100vh; width: 100%;">
     <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pb-12">
         <MudGrid Justify="Justify.Center">
@@ -12,9 +22,9 @@
                     return;
                 }
                 <MudStack Row="false">
-                    <MudText Class="pixelify" Color="Color.Warning" Typo="Typo.h1" GutterBottom Align="Align.Center">Who's that pokemon ?</MudText>
+                    <MudText Class="pixelify mt-4" Color="Color.Warning" Typo="Typo.h2" GutterBottom Align="Align.Center">Who's that pokemon ?</MudText>
                 </MudStack>
-                <MudStack Row Justify="Justify.Center">
+                <MudStack Row Justify="Justify.Center" Style="position: relative;">
                     <table style="border-collapse: collapse;">
                         <tbody>
                         @{
@@ -24,17 +34,33 @@
                                 <tr>
                                     @for (int x = 0; x < _image.Width; x++, i++)
                                     {
-                                        <td class="pa-0 ma-0" style="@($"border: thin solid #424242; background-color: {_colors[i]}; width: 25px!important; height: 25px!important;")">
-                                        </td>
+                                        <td class="pa-0 ma-0" style="@($"background: {_colors[i]}; width: 25px!important; height: 25px!important;")"></td>
                                     }
                                 </tr>
                             }
                         }
                         </tbody>
                     </table>
+                    <div class="absolute flex-1" style="width: 100%; height: 100%; image-rendering: pixelated!important;">
+                        <MudGrid Justify="Justify.Center" Style="height: 100%;">
+                            <MudItem xs="7"></MudItem>
+                            <MudItem Class="pt-12 pl-8" xs="3" Style="display: flex; flex-direction: column;">
+                                <img class="@($"{_blinkClass}")" src="https://henryjimenezp.github.io/P4-Pokedex/img/pokemon.png" border="0">
+                            </MudItem>
+                            <MudItem xs="1"></MudItem>
+                            <MudItem xs="1"></MudItem>
+                        </MudGrid>
+                    </div>
                 </MudStack>
             </MudItem>
             <MudItem xs="2"></MudItem>
+        </MudGrid>
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="4">
+                <MudTextField T="string" @bind-Value="_guess" Class="mud-elevation-10 rounded pixelify px-4 py-2 light-input"
+                              Variant="Variant.Text" Label="Nom du pokémon" Required RequiredError="" Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Send" OnAdornmentClick="@TryGuessNameAsync"/>
+            </MudItem>
         </MudGrid>
     </MudContainer>
 </section>

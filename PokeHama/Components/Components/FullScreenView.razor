@@ -1,0 +1,36 @@
+<MudOverlay @bind-Visible="ToggleFullScreen" LockScroll="true" ZIndex="1301" Style="align-items: flex-start; background: black;">
+    <MudIconButton Class="fullscreen-close-btn" Icon="@Icons.FullscreenExit" Color="Color.Warning" OnClick="@CloseFullScreen" />
+    <MudText Class="text-white pixelify absolute mt-8 mx-auto" Style="left: 50%; transform: translate(-50%); backdrop-filter: blur(4px); z-index: 1302!important;"
+             Typo="Typo.h3" Align="Align.Center">@Name</MudText>
+    <MudStack Row="false" Justify="Justify.Center" Style="width: 100vw;">
+        <MudGrid Justify="Justify.Center" Spacing="0" Style="height: 90vh;">
+            <MudItem xs="1"></MudItem>
+            <MudItem xs="10">
+                <MudImage Class="mx-auto pixel-rendered" Src="@($"{Hardcoded.IconUrl}{Id}.png")"
+                          Style="height:90vh; width: auto; position: relative; left: 50%; transform: translate(-50%);"/>
+            </MudItem>
+            <MudItem xs="1"></MudItem>
+        </MudGrid>
+        <MudStack Row Justify="Justify.Center" Style="width: 100%;">
+            <MudButton Class="px-auto pixelify mx-2" Variant="Variant.Filled" Color="Color.Tertiary">Imprimer</MudButton>
+            <MudButton Class="px-auto pixelify" Variant="Variant.Filled" Color="Color.Secondary">Exporter (.png)</MudButton>
+        </MudStack>
+    </MudStack>
+</MudOverlay>
+
+@code {
+    [Parameter] public bool ToggleFullScreen { get; set; }
+    [Parameter] public Overview Overview { get; set; } = null!;
+
+    [Parameter] public List<string> Pixels { get; set; } = null!;
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string Name { get; set; } = null!;
+    
+    [Parameter] public int ImageWidth { get; set; }
+    [Parameter] public int ImageHeight { get; set; }
+
+    private async Task CloseFullScreen()
+    {
+        await Overview.ToggleFullScreen(false);
+    }
+}

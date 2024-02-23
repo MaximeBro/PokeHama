@@ -1,5 +1,6 @@
 using MudBlazor.Services;
 using PokeHama.Components;
+using PokeHama.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
+builder.Services.AddSingleton<FetchService>();
 
 var app = builder.Build();
 
@@ -26,5 +28,8 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+var fetchService = app.Services.GetRequiredService<FetchService>();
+await fetchService.InitAsync();
 
 await app.RunAsync();

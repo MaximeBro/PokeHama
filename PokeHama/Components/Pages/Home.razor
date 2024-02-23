@@ -1,7 +1,8 @@
 ﻿@page "/"
 
 <PageTitle>PokéHama</PageTitle>
-<MudScrollToTop>
+
+<MudScrollToTop Class="mb-8 py-16">
     <MudFab Color="Color.Warning" StartIcon="@Icons.KeyboardArrowUp" />
 </MudScrollToTop>
 <section class="dark-bg" style="min-height: 100vh; width: 100%;">
@@ -16,31 +17,34 @@
         <MudItem Class="pt-3" xs="8">
             <MudText Class="text-white pixelify" Typo="Typo.h1" Align="Align.Center" GutterBottom>PokéHama</MudText>
             <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center" GutterBottom>Choose your pokemon !</MudText>
-            @if (_loading)
+            @if (_loading || !_pokemons.Any())
             {
                 <MudProgressCircular Indeterminate Color="Color.Warning" />
             }
             else
             {
-                <MudGrid Class="mt-4" Justify="Justify.Center">
-                    @foreach (var pokemon in _filtered)
+                <MudGrid @rendermode="InteractiveAuto" Class="mt-4" Justify="Justify.Center">
+                    @for (int i=1; i <= AmountToDisplay; i++)
                     {
-                        <MudItem id="pokemon-grid" xs="12" sm="4" md="4" lg="4" xl="3">
-                            <Mosaic Url="@pokemon"/>
+                        int index = i;
+                        <MudItem xs="12" sm="4" md="4" lg="4" xl="3">
+                            <div id="@($"poke_img-{index+5000}")" style="width: 100%; height: 100%; position: relative!important;">
+                                <MudLink Href="@($"/overview/{index}")">
+                                    <MudImage id="@($"{index}")" Src="@(_pokemons[index-1])" Alt="@($"pokemon-{index}")" Class="pixel-rendered pokemon-item centered scale-up floating" Style="width: 320px; height: auto;"/>
+                                </MudLink>
+                            </div>
                         </MudItem>
                     }
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                    <script src="js/pokemon-grid-scaling.js"></script>
                 </MudGrid>
                 <MudStack Row Style="height: 5em;"></MudStack>
             }
         </MudItem>
         
         <MudItem Class="pt-16" xs="2">
-            <MudStack Row="false" Justify="Justify.Center">
+            <MudStack Class="fixed" Row="false" Justify="Justify.Center">
                 <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center">Paramètres</MudText>
                 <MudStack Class="px-16" Row>
-                    <MudSlider T="int" @bind-Value="AmoutToDisplay" Class="text-white pixelify" Min="1" Max="807" Color="Color.Warning" Step="3" ValueLabel>
+                    <MudSlider T="int" @bind-Value="AmountToDisplay" Class="text-white pixelify" Min="1" Max="807" Color="Color.Warning" Step="3" ValueLabel>
                         Pokémons
                     </MudSlider> 
                 </MudStack>

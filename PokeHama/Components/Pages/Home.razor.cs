@@ -1,37 +1,40 @@
-using PokeHama.Extensions;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using PokeHama.Services;
 
 namespace PokeHama.Components.Pages;
 
 public partial class Home
 {
-	private List<string> _pokemons = new();
-	private List<string> _filtered = new();
-	private bool _loading;
-	private int _amountToDisplay = 807;
+    [Inject] public FetchService FetchService { get; set; } = null!;
+    [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
 
-	public int AmoutToDisplay
-	{
-		get => _amountToDisplay;
-		set
-		{
-			_amountToDisplay = value;
-			_filtered = _pokemons.Take(value).ToList();
-			StateHasChanged();
-		}
-	}
-	
-	
-	protected override Task OnInitializedAsync()
-	{
-		_loading = true;
-		
-		for (int i = 1; i <= _amountToDisplay; i++)
-		{
-			_pokemons.Add($"{Hardcoded.IconUrl}{i}.png");
-		}
+    private List<string> _pokemons = new();
+    private bool _loading;
+    private int _amountToDisplay = 151;
 
-		_filtered = _pokemons.ToList();
-		_loading = false;
-		return Task.CompletedTask;
-	}
+
+    public int AmountToDisplay
+    {
+        get => _amountToDisplay;
+        set
+        {
+            _amountToDisplay = value;
+            _pokemons = FetchService.Pokemons.Select(x => x.Value.Img).Take(value).ToList();
+             StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _loading = true;
+        _pokemons = FetchService.Pokemons.Select(x => x.Value.Img).ToList();
+        _loading = false;
+    }
+
+    private async Task RefreshGridAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("");
+        StateHasChanged();
+    }
 }

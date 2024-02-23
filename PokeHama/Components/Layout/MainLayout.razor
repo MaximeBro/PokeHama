@@ -1,12 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider/>
+<MudThemeProvider DefaultScrollbar/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
 <MudLayout>
     <Header></Header>
-    <MudMainContent Class="pa-0 ma-0">
+    <MudMainContent Class="pa-0 ma-0" Style="padding-top: 64px!important;">
         @Body
     </MudMainContent>
     <Footer></Footer>

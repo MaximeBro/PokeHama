@@ -8,7 +8,8 @@
     <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pb-12">
         <MudGrid Justify="Justify.Center">
             <MudItem xs="2" Class="dark-bg">
-                <MudGrid Class="pt-16" Justify="Justify.Center">
+                <MudText Class="pt-16 text-white pixelify ml-6 mb-2" Typo="Typo.h5">Palette</MudText>
+                <MudGrid Justify="Justify.Center">
                     @foreach (var color in _palette)
                     {
                         <MudTooltip Text="@($"{color}")" Arrow Placement="Placement.Top">
@@ -22,10 +23,14 @@
                     }
                 </MudGrid>
                 <MudStack Class="mt-8 pt-12 px-2" Row="false" Justify="Justify.Center">
-                    <MudText Class="text-white pixelify ml-4 mb-n2" Typo="Typo.h6">Options</MudText>
-                    <MudStack Class="pa-2 mud-elevation-10 rounded" Row="false" Justify="Justify.Center">
-                        <MudSwitch T="bool" @bind-Value="_toggleGrid" Class="text-white ml-2" Label="Grille" ThumbIcon="@(_toggleGrid ? Icons.GridOn : Icons.GridOff)"
-                                   ThumbIconColor="@(_toggleGrid ? Color.Info : Color.Dark)" Size="Size.Large" />
+                    <MudText Class="text-white pixelify ml-4 mb-n2" Typo="Typo.h5">Options</MudText>
+                    <MudStack Class="pa-2 mud-elevation-10 rounded" Row="false" Justify="Justify.Center" Spacing="0">
+                        <MudSwitch T="bool" @bind-Value="_toggleGrid" Class="text-white ml-2 pixelify" Label="Grille" ThumbIcon="@(_toggleGrid ? Icons.GridOn : Icons.GridOff)"
+                                   ThumbIconColor="@(_toggleGrid ? Color.Info : Color.Dark)" Size="Size.Large"/>
+                        <MudText Class="text-white pixelify">
+                            <MudIconButton Icon="@Icons.Fullscreen" Color="Color.Warning" OnClick="@(() => ToggleFullScreen(true))"/>
+                            Fullscreen
+                        </MudText>
                     </MudStack>
                 </MudStack>
             </MudItem>
@@ -45,10 +50,10 @@
                                 int i = 0;
                                 for (int y = 0; y < _image.Height; y++)
                                 {
-                                    <tr>
+                                    <tr style="background-color: black;">
                                         @for (int x = 0; x < _image.Width; x++, i++)
                                         {
-                                            <td class="pa-0 ma-0" style="@($"{_gridStyle} background-color: {_pixels[i]}; width: 25px!important; height: 25px!important;")">
+                                            <td class="pa-0 ma-0 scalable" style="@($"{_gridStyle} background: {_pixels[i]}; width: 25px!important; height: 25px!important;")">
                                             </td>
                                         }
                                     </tr>
@@ -65,3 +70,10 @@
         </MudGrid>
     </MudContainer>
 </section>
+<script src="/js/fullscreen-handler.js"></script>
+
+@if (_image != null)
+{
+    <FullScreenView Overview="@this" ToggleFullScreen="@_toggleFullScreen" Pixels="@_pixels" Id="@Id" Name="@_name" 
+                    ImageWidth="@_image.Width" ImageHeight="@_image.Height" />
+}

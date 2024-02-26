@@ -12,6 +12,11 @@
                 <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center">Mini games</MudText>
                 <MudButton Class="mx-auto pixelify" Color="Color.Warning" Href="/guess">Who's that pokemon ?</MudButton>
             </MudStack>
+            
+            <MudStack Class="mt-16" Row="false" Justify="Justify.Center">
+                <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center">Informations</MudText>
+                <MudButton Class="mx-auto pixelify" Color="Color.Warning" OnClick="@SharePaletteFileAsync">Palette</MudButton>
+            </MudStack>
         </MudItem>
         
         <MudItem Class="pt-3" xs="8">
@@ -30,7 +35,7 @@
                         <MudItem xs="12" sm="4" md="4" lg="4" xl="3">
                             <div id="@($"poke_img-{index+5000}")" style="width: 100%; height: 100%; position: relative!important;">
                                 <MudLink Href="@($"/overview/{index}")">
-                                    <MudImage id="@($"{index}")" Src="@(_pokemons[index-1])" Alt="@($"pokemon-{index}")" Class="pixel-rendered pokemon-item centered scale-up floating" Style="width: 320px; height: auto;"/>
+                                    <MudImage id="@($"{index}")" Src="@(_pokemons[index-1])" Alt="@($"pokemon-{index}")" Class="pixel-rendered centered scale-up floating" Style="width: 320px; height: auto;"/>
                                 </MudLink>
                             </div>
                         </MudItem>
@@ -52,3 +57,18 @@
         </MudItem>
     </MudGrid>
 </section>
+
+<script>
+    window.downloadFileFromStreamAsync = async (fileName, contentStreamReference) => {
+      const arrayBuffer = await contentStreamReference.arrayBuffer();
+      const blob = new Blob([arrayBuffer]);
+      const url = URL.createObjectURL(blob);
+      const anchorElement = document.createElement("a");
+    
+      anchorElement.href = url;
+      anchorElement.download = fileName ?? "";
+      anchorElement.click();
+      anchorElement.remove();
+      URL.revokeObjectURL(url);
+    }
+</script>

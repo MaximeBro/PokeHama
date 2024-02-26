@@ -29,6 +29,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+
 var fetchService = app.Services.GetRequiredService<FetchService>();
 await fetchService.InitAsync();
 

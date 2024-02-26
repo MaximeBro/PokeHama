@@ -20,4 +20,8 @@
       <Content Include="wwwroot\data\pokemon_names.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\_content\pictures\" />
+    </ItemGroup>
+
 </Project>

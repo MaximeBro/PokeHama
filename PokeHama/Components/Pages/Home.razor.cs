@@ -32,9 +32,11 @@ public partial class Home
         _loading = false;
     }
 
-    private async Task RefreshGridAsync()
+    private async Task SharePaletteFileAsync()
     {
-        await JsRuntime.InvokeVoidAsync("");
-        StateHasChanged();
+        var fileStream = File.OpenRead("wwwroot/_content/pictures/palette-hama.png");
+        fileStream.Position = 0;
+        var streamRef = new DotNetStreamReference(fileStream);
+        await JsRuntime.InvokeVoidAsync("downloadFileFromStreamAsync", "palette.png", streamRef);
     }
 }

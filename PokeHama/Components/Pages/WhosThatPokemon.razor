@@ -64,3 +64,27 @@
         </MudGrid>
     </MudContainer>
 </section>
+
+<video id="rickroll" style="display: none!important;">
+    <source src="./_content/vids/NeverGonnaGiveYouUp.mp4" type="video/mp4"/>
+</video>
+<video id="itspikachu" style="display: none!important;">
+    <source src="./_content/vids/ItsPikachu!!!.mp4" type="video/mp4"/>
+</video>
+<script>
+    window.playRickRoll = async function () {
+        const vid = document.getElementById('rickroll');
+        console.log(vid);
+        if (vid) {
+            await vid.play();
+        }
+    };
+
+    window.playItsPikachu = async function () {
+        const vid = document.getElementById('itspikachu');
+        console.log(vid);
+        if (vid) {
+            await vid.play();
+        }
+    };
+</script>

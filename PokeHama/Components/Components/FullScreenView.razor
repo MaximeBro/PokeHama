@@ -13,12 +13,14 @@
         </MudGrid>
         <MudStack Row Justify="Justify.Center" Style="width: 100%;">
             <MudButton Class="px-auto pixelify mx-2" Variant="Variant.Filled" Color="Color.Tertiary">Imprimer</MudButton>
-            <MudButton Class="px-auto pixelify" Variant="Variant.Filled" Color="Color.Secondary">Exporter (.png)</MudButton>
+            <MudButton Class="px-auto pixelify" Variant="Variant.Filled" Color="Color.Secondary" OnClick="@DownloadPngAsync">Exporter (.png)</MudButton>
         </MudStack>
     </MudStack>
 </MudOverlay>
 
 @code {
+    [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
+    
     [Parameter] public bool ToggleFullScreen { get; set; }
     [Parameter] public Overview Overview { get; set; } = null!;
 
@@ -32,5 +34,14 @@
     private async Task CloseFullScreen()
     {
         await Overview.ToggleFullScreen(false);
+    }
+
+    private async Task DownloadPngAsync()
+    {
+        var client = new HttpClient();
+        var fileStream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
+        var dotnetStream = new DotNetStreamReference(fileStream);
+        
+        await JsRuntime.InvokeVoidAsync("downloadFileFromStream", $"{Name}.png", dotnetStream);
     }
 }

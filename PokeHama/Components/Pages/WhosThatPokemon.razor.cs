@@ -1,5 +1,6 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 using PokeHama.Extensions;
 using PokeHama.Services;
@@ -12,6 +13,7 @@ public partial class WhosThatPokemon
 {
     [Inject] public NavigationManager NavManager { get; set; } = null!;
     [Inject] public FetchService FetchService { get; set; } = null!;
+    [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
     
     private readonly List<string> _pixels = new();
@@ -76,6 +78,7 @@ public partial class WhosThatPokemon
                     {
                         _guess = string.Empty;
                         await RevealPokemonAsync();
+                        await PlayItsPikachuAsync();
                         StateHasChanged();
                         _successOver = true;
                         Snackbar.Add("<span class=\"text-center\">Bien joué !</span>", Severity.Success, options =>
@@ -88,7 +91,7 @@ public partial class WhosThatPokemon
                     {
                         _guess = string.Empty;
                         Snackbar.Add("Non, ce n'est pas ça...Essaye de nouveau !", Severity.Warning);
-                        NavManager.NavigateTo("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", true);
+                        await PlayRickRollAsync();
                     }
                 }
                 else
@@ -107,7 +110,7 @@ public partial class WhosThatPokemon
                     {
                         _guess = string.Empty;
                         Snackbar.Add("Non, ce n'est pas ça...Essaye de nouveau !", Severity.Warning);
-                        NavManager.NavigateTo("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", true);
+                        await PlayRickRollAsync();
                     } 
                 }
             }
@@ -144,5 +147,15 @@ public partial class WhosThatPokemon
         }
 
         _colors = _pixels.ToList();
+    }
+
+    private async Task PlayRickRollAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("playRickRoll");
+    }
+    
+    private async Task PlayItsPikachuAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("playItsPikachu");
     }
 }

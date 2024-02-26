@@ -14,7 +14,7 @@ public class FetchService
 
     public FetchService() { }
 
-    public async Task InitAsync()
+    public Task InitAsync()
     {
         var stream = File.OpenRead($"{Directory.GetCurrentDirectory()}\\Data\\pokemon_names.json");
         Names = JsonSerializer.Deserialize<Dictionary<int, string>>(stream)!;
@@ -27,6 +27,8 @@ public class FetchService
                 Name = Names[i]
             });
         }
+
+        return Task.CompletedTask;
     }
 
     public async Task<List<DotNetStreamReference>> GetPokemonsAsStreamsAsync(int amount = 807)

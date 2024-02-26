@@ -15,6 +15,7 @@ public partial class WhosThatPokemon
     [Inject] public FetchService FetchService { get; set; } = null!;
     [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
+    [Parameter] public int? Id { get; set; }
     
     private readonly List<string> _pixels = new();
     private List<string> _colors = new();
@@ -24,10 +25,15 @@ public partial class WhosThatPokemon
     private string _guess = string.Empty;
     private string _blinkClass => _successOver ? "transparent" : "blink";
     private bool _successOver;
+    private bool _displayMute;
 
     protected override async Task OnInitializedAsync()
     {
         _currentId = new Random().Next(1, 808);
+        if (Id.HasValue)
+        {
+            _currentId = Id.Value;
+        }
         var client = new HttpClient();
         var stream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{_currentId}.png");
         var ms = new MemoryStream();
@@ -152,10 +158,30 @@ public partial class WhosThatPokemon
     private async Task PlayRickRollAsync()
     {
         await JsRuntime.InvokeVoidAsync("playRickRoll");
+        _displayMute = true;
+        StateHasChanged();
     }
     
     private async Task PlayItsPikachuAsync()
     {
         await JsRuntime.InvokeVoidAsync("playItsPikachu");
+        _displayMute = true;
+        StateHasChanged();
+    }
+
+    private async Task StopVideosAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("stopRickRoll");
+        await JsRuntime.InvokeVoidAsync("stopItsPikachu");
+        _displayMute = false;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    private Task ToggleMuteButton()
+    {
+        _displayMute = false;
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 }

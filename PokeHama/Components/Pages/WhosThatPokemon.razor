@@ -1,4 +1,4 @@
-@page "/guess"
+@page "/guess/{Id:int?}"
 
 <PageTitle>PokéHama</PageTitle>
 
@@ -57,9 +57,19 @@
         </MudGrid>
         <MudGrid Justify="Justify.Center">
             <MudItem xs="4">
-                <MudTextField T="string" @bind-Value="_guess" Class="mud-elevation-10 rounded pixelify px-4 py-2 light-input"
-                              Variant="Variant.Text" Label="Nom du pokémon" Required RequiredError="" Adornment="Adornment.End"
-                              AdornmentIcon="@Icons.Send" OnAdornmentClick="@TryGuessNameAsync"/>
+                <MudStack Class="mud-elevation-10 rounded px-4 py-2" Row Justify="Justify.Center" AlignItems="AlignItems.Center">
+                    <MudTextField T="string" @bind-Value="_guess" Class="pixelify light-input"
+                                  Variant="Variant.Text" Label="Nom du pokémon" Required RequiredError="" Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Send" OnAdornmentClick="@TryGuessNameAsync"/>
+                    @if (_displayMute)
+                    {
+                        <div>
+                            <MudTooltip Text="Muter la musique" Arrow Placement="Placement.Bottom">
+                                <MudIconButton Class="text-white blink-gray" Icon="@Icons.VolumeOff" OnClick="@(async () => await StopVideosAsync())"/>
+                            </MudTooltip>
+                        </div>
+                    }
+                </MudStack>
             </MudItem>
         </MudGrid>
     </MudContainer>
@@ -74,17 +84,37 @@
 <script>
     window.playRickRoll = async function () {
         const vid = document.getElementById('rickroll');
-        console.log(vid);
         if (vid) {
+            vid.currentTime = 0;
             await vid.play();
+            vid.onended = async function () {
+                await dotNetHelper.invokeMethodAsync('ToggleMuteButton').catch(error => { console.log(error); });
+            };
+        }
+    };
+    
+    window.stopRickRoll = async function () {
+        const vid = document.getElementById('rickroll');
+        if (vid && !vid.paused) {
+            await vid.pause();
         }
     };
 
     window.playItsPikachu = async function () {
         const vid = document.getElementById('itspikachu');
-        console.log(vid);
         if (vid) {
+            vid.currentTime = 0;
             await vid.play();
+            vid.onended = async function () {
+                await dotNetHelper.invokeMethodAsync('ToggleMuteButton').catch(error => { console.log(error); });
+            };
+        }
+    };
+
+    window.stopItsPikachu = async function () {
+        const vid = document.getElementById('itspikachu');
+        if (vid && !vid.paused) {
+            await vid.pause();
         }
     };
 </script>

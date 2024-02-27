@@ -15,7 +15,7 @@
             
             <MudStack Class="mt-16" Row="false" Justify="Justify.Center">
                 <MudText Class="text-white pixelify" Typo="Typo.h4" Align="Align.Center">Informations</MudText>
-                <MudButton Class="mx-auto pixelify" Color="Color.Warning" OnClick="@SharePaletteFileAsync">Palette</MudButton>
+                <MudButton Class="mx-auto pixelify" Color="Color.Warning" Href="/api/files/palette-hama.png">Palette</MudButton>
             </MudStack>
         </MudItem>
         
@@ -57,18 +57,3 @@
         </MudItem>
     </MudGrid>
 </section>
-
-<script>
-    window.downloadFileFromStreamAsync = async (fileName, contentStreamReference) => {
-      const arrayBuffer = await contentStreamReference.arrayBuffer();
-      const blob = new Blob([arrayBuffer]);
-      const url = URL.createObjectURL(blob);
-      const anchorElement = document.createElement("a");
-    
-      anchorElement.href = url;
-      anchorElement.download = fileName ?? "";
-      anchorElement.click();
-      anchorElement.remove();
-      URL.revokeObjectURL(url);
-    }
-</script>

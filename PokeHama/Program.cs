@@ -1,10 +1,14 @@
 using MudBlazor.Services;
 using PokeHama.Components;
+using PokeHama.Extensions;
 using PokeHama.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -25,6 +29,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseUploading();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

@@ -31,12 +31,4 @@ public partial class Home
         _pokemons = FetchService.Pokemons.Select(x => x.Value.Img).ToList();
         _loading = false;
     }
-
-    private async Task SharePaletteFileAsync()
-    {
-        var fileStream = File.OpenRead("wwwroot/_content/pictures/palette-hama.png");
-        fileStream.Position = 0;
-        var streamRef = new DotNetStreamReference(fileStream);
-        await JsRuntime.InvokeVoidAsync("downloadFileFromStreamAsync", "palette.png", streamRef);
-    }
 }

@@ -12,9 +12,9 @@ html, body {
 .text-yellow { color: #FF9800!important; }
 
 .yellow-bg { background-color: #FF9800!important; }
-.light-bg { background-color: #545454; }
-.dark-bg { background-color: #424242; }
-.darker-bg { background-color: #303030; }
+.light-bg { background-color: #545454!important; }
+.dark-bg { background-color: #424242!important; }
+.darker-bg { background-color: #303030!important; }
 
 .white-all * { color: #fff!important; }
 
@@ -93,7 +93,7 @@ html, body {
 
 .c-menu-item .mud-list-item-text p {
     display: flex;
-    align-items: center;
+    align-items: center
 }
 
 .transparent { opacity: 0; background: transparent!important; }

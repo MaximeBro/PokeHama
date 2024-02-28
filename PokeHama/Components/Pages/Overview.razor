@@ -31,6 +31,10 @@
                             <MudIconButton Icon="@Icons.Fullscreen" Color="Color.Warning" OnClick="@(() => ToggleFullScreen(true))"/>
                             Fullscreen
                         </MudText>
+                        <MudSlider T="int" @bind-Value="_pixelSize" Class="text-white pixelify px-4 mb-5" Immediate Min="15" Max="25"
+                                   Color="Color.Warning" Variant="Variant.Filled" TickMarkLabels="@(new []{ "15", "", "", "", "", "", "", "", "", "", "25" })" TickMarks ValueLabel>
+                            Taille
+                        </MudSlider>
                     </MudStack>
                 </MudStack>
             </MudItem>
@@ -53,7 +57,7 @@
                                     <tr style="background-color: black;">
                                         @for (int x = 0; x < _image.Width; x++, i++)
                                         {
-                                            <td class="pa-0 ma-0 scalable" style="@($"{_gridStyle} background: {_pixels[i]}; width: 25px!important; height: 25px!important;")">
+                                            <td class="pa-0 ma-0 scalable" style="@($"{_gridStyle} background: {_pixels[i]}; width: {_pixelSize}px!important; height: {_pixelSize}px!important;")">
                                             </td>
                                         }
                                     </tr>

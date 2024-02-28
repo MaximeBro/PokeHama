@@ -20,6 +20,7 @@ public partial class Overview
 
     private bool _toggleGrid = true;
     private bool _toggleFullScreen = false;
+    private int _pixelSize = 25;
     private string _gridStyle => _toggleGrid ? "border: thin solid #424242;" : string.Empty;
 
     protected override async Task OnInitializedAsync()

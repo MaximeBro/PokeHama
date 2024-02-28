@@ -1,3 +1,5 @@
+@using PokeHama.Models
+@using PokeHama.Services
 <MudMenu Class="text-white icon-hoverable" PopoverClass="transparent" ListClass="darker-bg rounded-lg" Icon="@Icons.AccountCircle" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
     <MudStack Class="pt-1" Row="false" Spacing="0">
         <div class="d-flex mx-4" style="align-items: center;">
@@ -11,10 +13,21 @@
         </div>
         <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
         <MudMenuItem Class="my-0 text-white c-menu-item"><MudIcon Class="text-white mr-3" Icon="@Icons.Share" /> Partager</MudMenuItem>
-        <MudMenuItem Class="my-0 text-white c-menu-item"><MudIcon Class="text-white mr-3" Icon="@Icons.Logout" /> Se déconnecter</MudMenuItem>
+        <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@(async() => await SignOutAsync())">
+            <MudIcon Class="text-white mr-3" Icon="@Icons.Logout"/>
+            Se déconnecter
+        </MudMenuItem>
     </MudStack>
 </MudMenu>
 
 @code {
-    
+    [Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
+
+    private async Task SignOutAsync() => await AuthenticationService.SignOutAsync();
+    public UserModel? User { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await AuthenticationService.GetUserAsync();
+    }
 }

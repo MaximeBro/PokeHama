@@ -16,12 +16,12 @@
                         <EditForm Model="@_model" OnValidSubmit="@TryLoginAsync">
                             <div>
                                 <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify mb-2" Label="@($"@Identifiant")" Variant="Variant.Filled"
-                                              Style="min-width: 260px;"/>
+                                              Required For="@(() => _model.Username)" Style="min-width: 260px;"/>
                             </div>
                             <div>
                                 <MudTextField T="string" @bind-Value="_password" Class="white-all pixelify" Label="Mot de passe" Variant="Variant.Filled"
                                               InputType="@PasswordInputType" AdornmentIcon="@PasswordIcon" Adornment="Adornment.End"
-                                              OnAdornmentClick="@(() => _shown = !_shown)" Style="min-width: 260px;"/>
+                                              OnAdornmentClick="@(() => _shown = !_shown)" Required For="@(() => _model.Password)" Style="min-width: 260px;"/>
                             </div>
                             <MudStack Class="mt-4 py-4" Row Justify="Justify.Center">
                                 <MudButton Class="pixelify text-white" Color="Color.Transparent" Size="Size.Large" DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit">
@@ -30,7 +30,7 @@
                             </MudStack>
                             @if (_errorMessage)
                             {
-                                <MudAlert Dense Elevation="1" Variant="Variant.Outlined" Severity="Severity.Error">Mauvais couple d'identifiants !</MudAlert>
+                                <MudAlert Dense Elevation="1" Variant="Variant.Filled" Severity="Severity.Error">Mauvais couple d'identifiants !</MudAlert>
                             }
                         </EditForm>
                     </MudStack>

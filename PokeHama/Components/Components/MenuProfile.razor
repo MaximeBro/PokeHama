@@ -1,13 +1,14 @@
-@using PokeHama.Models
+@using System.Security.Claims
 @using PokeHama.Services
+
 <MudMenu Class="text-white icon-hoverable" PopoverClass="transparent" ListClass="darker-bg rounded-lg" Icon="@Icons.AccountCircle" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
     <MudStack Class="pt-1" Row="false" Spacing="0">
         <div class="d-flex mx-4" style="align-items: center;">
             <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">P</MudAvatar>
             <div>
-                <MudText Class="text-white">Patrick Gérard</MudText>
+                <MudText Class="text-white">@_firstname @_lastname</MudText>
                 <MudLink Style="text-decoration-color: #fff;" Href="/">
-                    <MudText Class="text-white" Typo="Typo.caption" Style="font-size: 14px;">@@patrick</MudText>
+                    <MudText Class="text-white" Typo="Typo.caption" Style="font-size: 14px;">@_username</MudText>
                 </MudLink>
             </div>
         </div>
@@ -23,11 +24,25 @@
 @code {
     [Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
 
-    private async Task SignOutAsync() => await AuthenticationService.SignOutAsync();
-    public UserModel? User { get; set; }
+    private ClaimsPrincipal? _user;
+    private string? _firstname;
+    private string? _lastname;
+    private string? _username;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        User = await AuthenticationService.GetUserAsync();
+        _user = AuthenticationService.User;
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && _user != null)
+        {
+            _firstname = _user.FindFirstValue("firstname");
+            _lastname = _user.FindFirstValue("lastname");
+            _username = $"@{_user.FindFirstValue(ClaimTypes.Surname) ?? "Inconnu"}";
+        }
+    }
+
+    private async Task SignOutAsync() => await AuthenticationService.SignOutAsync();
 }

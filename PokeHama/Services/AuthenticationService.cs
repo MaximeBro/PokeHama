@@ -39,6 +39,8 @@ public class AuthenticationService
         {
             new Claim(ClaimTypes.Name, userModel.UserName),
             new Claim(ClaimTypes.Email, userModel.Email),
+            new Claim("firstname", userModel.FirstName),
+            new Claim("lastname", userModel.LastName),
             new Claim(ClaimTypes.Role, userModel.Role.ToString())
         };
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

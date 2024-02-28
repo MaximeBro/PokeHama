@@ -14,7 +14,6 @@ public partial class Login
     [Inject] public IDbContextFactory<UtiliyContext> UtilityFactory { get; set; } = null!;
     [Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
-    [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
     private LoginModel _model = new();
     private bool _errorMessage;
@@ -48,20 +47,15 @@ public partial class Login
             var timer = new Timer(5000);
             timer.Elapsed += (obj, e) => { _errorMessage = false; _ = InvokeAsync(StateHasChanged); timer.Dispose(); };
             timer.Start();
-            Snackbar.Add("Mauvais couple d'identifiants !", Severity.Error, options =>
-            {
-                options.VisibleStateDuration = 2000;
-                options.ShowCloseIcon = false;
-            });
         }
     }
 
     private sealed class LoginModel
     {
         [Required(ErrorMessage = "Veuillez spécifier votre identifiant.")]
-        public string? Username { get; set; }
-        
+        public string Username { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Veuillez spécifier votre mot de passe.")]
-        public string? Password { get; set; }
+        public string Password { get; set; } = string.Empty;
     } 
 }

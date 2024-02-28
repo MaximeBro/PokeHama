@@ -14,6 +14,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<FetchService>();
+builder.Services.AddSingleton<MiniGamesService>();
 
 var app = builder.Build();
 
@@ -37,6 +38,8 @@ app.MapRazorComponents<App>()
 
 
 var fetchService = app.Services.GetRequiredService<FetchService>();
+var minigamesService = app.Services.GetRequiredService<MiniGamesService>();
 await fetchService.InitAsync();
+await minigamesService.InitAsync();
 
 await app.RunAsync();

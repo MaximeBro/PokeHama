@@ -12,6 +12,7 @@ namespace PokeHama.Components.Pages;
 public partial class WhosThatPokemon
 {
     [Inject] public NavigationManager NavManager { get; set; } = null!;
+    [Inject] public MiniGamesService MiniGamesService { get; set; } = null!;
     [Inject] public FetchService FetchService { get; set; } = null!;
     [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
@@ -80,45 +81,39 @@ public partial class WhosThatPokemon
                 var comparer = StringComparer.Create(new CultureInfo("fr-FR"), true);
                 if (_currentId == 35) // EASTER w/ Mélofée
                 {
-                    if (comparer.Compare(_guess, "pikachu") == 0)
+                    if (_guess.ToAscii() == "pikachu")
                     {
                         _guess = string.Empty;
                         await RevealPokemonAsync();
                         await PlayItsPikachuAsync();
-                        StateHasChanged();
                         _successOver = true;
                         Snackbar.Add("<span class=\"text-center\">Bien joué !</span>", Severity.Success, options =>
                         {
                             options.HideIcon = true;
                             options.SnackbarVariant = Variant.Text;
                         });
-                    }
-                    else
-                    {
-                        _guess = string.Empty;
-                        Snackbar.Add("Non, ce n'est pas ça...Essaye de nouveau !", Severity.Warning);
-                        await PlayRickRollAsync();
+                        return;
                     }
                 }
                 else
                 {
-                    if (comparer.Compare(_guess.Replace("é", "e").Replace("è", "e"), answer.Replace("é", "e").Replace("è", "e")) == 0)
+                    if (comparer.Compare(_guess.ToAscii(), answer.ToAscii()) == 0)
                     {
                         _guess = string.Empty;
+                        await RevealPokemonAsync();
                         _successOver = true;
                         Snackbar.Add("Bien joué !", Severity.Info, options =>
                         {
                             options.HideIcon = true;
                             options.SnackbarVariant = Variant.Text;
                         });
+                        return;
                     }
-                    else
-                    {
-                        _guess = string.Empty;
-                        Snackbar.Add("Non, ce n'est pas ça...Essaye de nouveau !", Severity.Warning);
-                        await PlayRickRollAsync();
-                    } 
                 }
+                
+                _guess = string.Empty;
+                Snackbar.Add(MiniGamesService.GetRandomFailGuessMessage(), Severity.Warning);
+                await PlayRickRollAsync();
             }
         }
         else

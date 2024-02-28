@@ -14,10 +14,10 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css" />
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css.map" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="wwwroot\data\pokemon_names.json" />
+      <_ContentIncludedByDefault Remove="hama\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="hama\appsettings.json" />
+      <_ContentIncludedByDefault Remove="hama\Data\fail_guess_messages.json" />
+      <_ContentIncludedByDefault Remove="hama\Data\pokemon_names.json" />
     </ItemGroup>
 
     <ItemGroup>

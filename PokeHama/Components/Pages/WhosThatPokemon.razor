@@ -34,7 +34,7 @@
                                 <tr>
                                     @for (int x = 0; x < _image.Width; x++, i++)
                                     {
-                                        <td class="pa-0 ma-0" style="@($"background: {_colors[i]}; width: 25px!important; height: 25px!important;")"></td>
+                                        <td class="pa-0 ma-0" style="@($"background: {_colors[i]}; width: 20px!important; height: 20px!important;")"></td>
                                     }
                                 </tr>
                             }
@@ -56,7 +56,7 @@
             <MudItem xs="2"></MudItem>
         </MudGrid>
         <MudGrid Justify="Justify.Center">
-            <MudItem xs="4">
+            <MudItem Class="mt-4" xs="4">
                 <MudStack Class="mud-elevation-10 rounded px-4 py-2" Row Justify="Justify.Center" AlignItems="AlignItems.Center">
                     <MudTextField T="string" @bind-Value="_guess" Class="pixelify light-input"
                                   Variant="Variant.Text" Label="Nom du pokémon" Required RequiredError="" Adornment="Adornment.End"

@@ -26,10 +26,6 @@ namespace PokeHama.Migrations
                     b.Property<DateTime>("CreatedAd")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("TEXT");

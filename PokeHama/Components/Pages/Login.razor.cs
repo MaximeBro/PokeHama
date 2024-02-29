@@ -17,8 +17,8 @@ public partial class Login
 
     private LoginModel _model = new();
     private bool _errorMessage;
-    private string _username;
-    private string _password;
+    private string _username = string.Empty;
+    private string _password = string.Empty;
 
     private bool _shown;
     public string PasswordIcon => _shown ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
@@ -30,7 +30,7 @@ public partial class Login
         if (isAuthenticated) NavManager.NavigateTo("/", true);
     }
 
-    private async Task TryLoginAsync()
+    private async Task TrySignInAsync()
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var users = await utilityDb.Users.ToListAsync();

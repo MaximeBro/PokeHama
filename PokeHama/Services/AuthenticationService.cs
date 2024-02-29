@@ -38,7 +38,6 @@ public class AuthenticationService
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, userModel.UserName),
-            new Claim(ClaimTypes.Email, userModel.Email),
             new Claim("firstname", userModel.FirstName),
             new Claim("lastname", userModel.LastName),
             new Claim(ClaimTypes.Role, userModel.Role.ToString())
@@ -66,7 +65,7 @@ public class AuthenticationService
         if (User is null) return null;
         
         var utilityDb = await _utilityFactory.CreateDbContextAsync();
-        var user = await utilityDb.Users.FirstOrDefaultAsync(x => x.Email == User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value);
+        var user = await utilityDb.Users.FirstOrDefaultAsync(x => x.UserName == User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)!.Value);
 
         return user;
     }

@@ -144,3 +144,20 @@ table {
 .fullscreen-close-btn * {
     z-index: 1399!important;
 }
+
+.pika-wp {
+    height: 100%!important;
+    width: 100%!important;
+    object-fit: cover!important;
+    position: absolute;
+    transition: transform .5s ease;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+.teams-bg {
+    background: url("/_content/pictures/pokehama-hub.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}

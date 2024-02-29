@@ -6,3 +6,5 @@ PokeHama/obj/
 PokeHama/bin/
 PokeHama/.idea
 .vs/PokeHama/v17
+
+data/db/

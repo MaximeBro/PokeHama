@@ -1,0 +1,59 @@
+@page "/inscription"
+
+<PageTitle>PokéHama</PageTitle>
+
+<section class="mud-grid" style="min-height: 100vh; width: 100%; justify-content: center; align-items: center; margin-top: -32px!important; position: relative!important;">
+    <video id="pika-wp" class="absolute pika-wp" autoplay muted loop>
+        <source src="./_content/vids/pika-wp.mp4" type="video/mp4"/>
+    </video>
+    <MudItem xs="12" sm="6" md="4" Class="d-flex" Style="align-items: center; justify-content: center;">
+        <MudStack Row="false" Spacing="0">
+            <MudPaper Class=" rounded-lg pt-3 pb-2 px-8" Elevation="20" Style="backdrop-filter: blur(20px) brightness(.85)!important; background: transparent!important;">
+                <MudText Class="text-white pixelify" Align="Align.Center" Typo="Typo.h3">Inscription</MudText>
+                <MudStack Row Spacing="0">
+                    <MudStack Row="false" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center" Style="min-width: 260px;">
+                        <EditForm Model="@_model" OnValidSubmit="@TrySignUpAsync">
+                            <MudStack Row>
+                                <MudTextField T="string" @bind-Value="_firstname" Class="white-all pixelify mb-2" Label="Prénom" Variant="Variant.Filled"
+                                              Required For="@(() => _model.Firstname)" Style="min-width: 220px;"/>
+
+                                <MudTextField T="string" @bind-Value="_lastname" Class="white-all pixelify mb-2" Label="Nom" Variant="Variant.Filled"
+                                              Required For="@(() => _model.Lastname)" Style="min-width: 220px;"/>
+                            </MudStack>
+                            <div>
+                                <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify mb-2" Label="@($"@Identifiant")" Variant="Variant.Filled"
+                                              Required For="@(() => _model.Username)" Style="min-width: 260px;"/>
+                            </div>
+                            <MudStack Row>
+                                <MudTextField T="string" @bind-Value="_password" Class="white-all pixelify" Label="Mot de passe" Variant="Variant.Filled"
+                                              InputType="@PasswordInputType" AdornmentIcon="@PasswordIcon" Adornment="Adornment.End"
+                                              OnAdornmentClick="@(() => _passwordShown = !_passwordShown)" Required For="@(() => _model.Password)" Style="min-width: 220px;"/>
+
+                                <MudTextField T="string" @bind-Value="_confirm" Class="white-all pixelify" Label="Confirmer" Variant="Variant.Filled"
+                                              InputType="@ConfirmInputType" AdornmentIcon="@ConfirmIcon" Adornment="Adornment.End"
+                                              OnAdornmentClick="@(() => _confirmShown = !_confirmShown)" Required For="@(() => _model.Confirm)" Style="min-width: 220px;"/>
+                            </MudStack>
+                            <MudStack Class="mt-4 py-4" Row Justify="Justify.Center">
+                                <MudButton Class="pixelify text-white" Color="Color.Transparent" Size="Size.Large" DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit">
+                                    S'inscrire
+                                </MudButton>
+                            </MudStack>
+                            @if (_errorMessage)
+                            {
+                                <MudAlert Dense Elevation="1" Variant="Variant.Filled" Severity="Severity.Error">@_errorMessageText</MudAlert>
+                            }
+                        </EditForm>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+            <MudStack Class="mt-4 mb-2" Row Justify="Justify.Center">
+                <MudDivider Class="rounded-xl" FlexItem DividerType="DividerType.FullWidth" Style="border: 2px solid transparent!important; max-width: 50px; backdrop-filter: blur(20px) brightness(.5);" />
+            </MudStack>
+            <MudLink Class="mt-2 px-16" Href="/connexion" Style="text-decoration-color: #fff;">
+                <MudText Class="text-white pixelify rounded-lg" Align="Align.Center" Typo="Typo.h6" Style="backdrop-filter: blur(20px) brightness(.95);">
+                    Déjà inscrit ? Connecte-toi ici !
+                </MudText>
+            </MudLink>
+        </MudStack>
+    </MudItem>
+</section>

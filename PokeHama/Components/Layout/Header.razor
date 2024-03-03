@@ -1,5 +1,4 @@
 @using System.Timers
-@using PokeHama.Services
 
 <MudAppBar Fixed Class="yellow-bg">
     <MudIconButton Class="@_easterBallClass" Icon="@Hardcoded.PokeBallIcon" OnClick="@OnEasterBall" />
@@ -9,16 +8,16 @@
     <MudMenu Class="white-all mr-4 rounded-0 pixelify hoverable" ListClass="nav-menu" Label="Mini games" EndIcon="@Icons.ArrowDropDown" ActivationEvent="MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
         <MudMenuItem Class="pixelify nav-menu-item" Href="/guess">Who's that pokemon ?</MudMenuItem>
     </MudMenu>
-    @if (AuthenticationService.IsAuthenticated)
-    {
-        <MenuProfile />
-    }
-    else
-    {
-        <MudButton Class="white-all pixelify rounded-xl" StartIcon="@Icons.AccountCircle" Variant="Variant.Outlined" Href="/connexion" Style="border-color: white; border-width: 2px!important;">
-            Connexion
-        </MudButton>
-    }
+    <AuthorizeView Roles="Admin,User">
+        <Authorized>
+            <ProfileMenu />
+        </Authorized>
+        <NotAuthorized>
+            <MudButton Class="white-all pixelify rounded-xl" StartIcon="@Icons.AccountCircle" Variant="Variant.Outlined" Href="/connexion" Style="border-color: white; border-width: 2px!important;">
+                Connexion
+            </MudButton>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudAppBar>
 
 @code {
@@ -28,10 +27,21 @@
     private int _easterBall = 0;
     private string _easterBallClass = "ball icon-hoverable";
     private Timer _ballTimer = new Timer(2950);
+    
+    private UserModel? _user;
 
     protected override void OnInitialized()
     {
         AuthenticationService.OnSignOutAsync += async () => { await InvokeAsync(StateHasChanged); NavManager.NavigateTo("/", true); };
+        AuthenticationService.OnSignInAsync += async () => await RefreshAuthenticationStateAsync();
+    }
+
+    private Task RefreshAuthenticationStateAsync()
+    {
+        _user = AuthenticationService.User;
+        StateHasChanged();
+
+        return Task.CompletedTask;
     }
 
     private void Random()

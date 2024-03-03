@@ -9,7 +9,7 @@ using PokeHama.Databases;
 
 namespace PokeHama.Migrations
 {
-    [DbContext(typeof(UtiliyContext))]
+    [DbContext(typeof(UtilityContext))]
     partial class UtiliyContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

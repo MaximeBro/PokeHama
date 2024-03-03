@@ -12,37 +12,58 @@
                 <MudText Class="text-white pixelify" Align="Align.Center" Typo="Typo.h3">Inscription</MudText>
                 <MudStack Row Spacing="0">
                     <MudStack Row="false" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center" Style="min-width: 260px;">
-                        <EditForm Model="@_model" OnValidSubmit="@TrySignUpAsync">
+                        <MudForm @ref="_form" @bind-IsValid="_isValid">
                             <MudStack Row>
-                                <MudTextField T="string" @bind-Value="_firstname" Class="white-all pixelify mb-2" Label="Prénom" Variant="Variant.Filled"
-                                              Required For="@(() => _model.Firstname)" Style="min-width: 220px;"/>
+                                <MudTextField T="string" @bind-Value="_model.Firstname" Class="white-all pixelify mb-2" Label="Prénom" Variant="Variant.Filled"
+                                              For="@(() => _model.Firstname)" OnlyValidateIfDirty Style="min-width: 220px;"
+                                              Required RequiredError="Veuillez renseigner votre prénom"/>
 
-                                <MudTextField T="string" @bind-Value="_lastname" Class="white-all pixelify mb-2" Label="Nom" Variant="Variant.Filled"
-                                              Required For="@(() => _model.Lastname)" Style="min-width: 220px;"/>
+                                <MudTextField T="string" @bind-Value="_model.Lastname" Class="white-all pixelify mb-2" Label="Nom" Variant="Variant.Filled"
+                                              For="@(() => _model.Lastname)" OnlyValidateIfDirty Style="min-width: 220px;"
+                                              Required RequiredError="Veuillez renseigner votre nom"/>
                             </MudStack>
                             <div>
-                                <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify mb-2" Label="@($"@Identifiant")" Variant="Variant.Filled"
-                                              Required For="@(() => _model.Username)" Style="min-width: 260px;"/>
+                                <MudTextField T="string" @bind-Value="_model.Username" Class="white-all pixelify mb-2" Label="@($"@Identifiant")" 
+                                              Variant="Variant.Filled" For="@(() => _model.Username)" OnlyValidateIfDirty Style="min-width: 260px;"
+                                              Required RequiredError="Veuillez renseigner un identifiant"/>
                             </div>
                             <MudStack Row>
-                                <MudTextField T="string" @bind-Value="_password" Class="white-all pixelify" Label="Mot de passe" Variant="Variant.Filled"
+                                <MudTextField T="string" @bind-Value="_model.Password" Class="white-all pixelify" Label="Mot de passe" Variant="Variant.Filled"
                                               InputType="@PasswordInputType" AdornmentIcon="@PasswordIcon" Adornment="Adornment.End"
-                                              OnAdornmentClick="@(() => _passwordShown = !_passwordShown)" Required For="@(() => _model.Password)" Style="min-width: 220px;"/>
+                                              OnAdornmentClick="@(() => _passwordShown = !_passwordShown)" For="@(() => _model.Password)"
+                                              OnlyValidateIfDirty Style="min-width: 220px;" Required RequiredError="Veuillez renseigner votre mot de passe"/>
 
-                                <MudTextField T="string" @bind-Value="_confirm" Class="white-all pixelify" Label="Confirmer" Variant="Variant.Filled"
+                                <MudTextField T="string" @bind-Value="_model.Confirm" Class="white-all pixelify" Label="Confirmer" Variant="Variant.Filled"
                                               InputType="@ConfirmInputType" AdornmentIcon="@ConfirmIcon" Adornment="Adornment.End"
-                                              OnAdornmentClick="@(() => _confirmShown = !_confirmShown)" Required For="@(() => _model.Confirm)" Style="min-width: 220px;"/>
+                                              OnAdornmentClick="@(() => _confirmShown = !_confirmShown)" For="@(() => _model.Confirm)"
+                                              OnlyValidateIfDirty Style="min-width: 220px;" Required RequiredError="Veuillez confirmer votre mot de passe"/>
                             </MudStack>
-                            <MudStack Class="mt-4 py-4" Row Justify="Justify.Center">
-                                <MudButton Class="pixelify text-white" Color="Color.Transparent" Size="Size.Large" DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit">
-                                    S'inscrire
-                                </MudButton>
+                            <MudCheckBox T="bool" @bind-Value="_model.PrivacyPolicy" Class="mt-3 pixelify" Dense For="@(() => _model.PrivacyPolicy)" Required
+                                         RequiredError="Veuillez accepter notre politique de confidentialité">
+                                <span class="ml-1">En cochant cette case vous acceptez notre <MudLink>politique de confidentialité.</MudLink></span>
+                            </MudCheckBox>
+                            <MudStack Class="py-4" Row Justify="Justify.Center">
+                                @if (!_loading)
+                                {
+                                    <MudButton Class="pixelify text-white" Color="Color.Transparent" Size="Size.Large" DisableElevation
+                                               Variant="Variant.Filled" Disabled="@(!_isValid)" OnClick="@TrySignUpAsync">
+                                        S'inscrire
+                                    </MudButton>
+                                }
+                                else
+                                {
+                                    <MudButton Class="pixelify text-white" Color="Color.Transparent" Size="Size.Large" DisableElevation Variant="Variant.Filled" Disabled>
+                                        <MudProgressCircular Class="mx-auto white-all" Indeterminate Size="Size.Small" />
+                                    </MudButton>
+                                }
                             </MudStack>
                             @if (_errorMessage)
                             {
-                                <MudAlert Dense Elevation="1" Variant="Variant.Filled" Severity="Severity.Error">@_errorMessageText</MudAlert>
+                                <MudAlert Class="mb-2" Dense Elevation="1" Variant="Variant.Filled" Severity="Severity.Error">
+                                    @_errorMessageText
+                                </MudAlert>
                             }
-                        </EditForm>
+                        </MudForm>
                     </MudStack>
                 </MudStack>
             </MudPaper>
@@ -50,7 +71,7 @@
                 <MudDivider Class="rounded-xl" FlexItem DividerType="DividerType.FullWidth" Style="border: 2px solid transparent!important; max-width: 50px; backdrop-filter: blur(20px) brightness(.5);" />
             </MudStack>
             <MudLink Class="mt-2 px-16" Href="/connexion" Style="text-decoration-color: #fff;">
-                <MudText Class="text-white pixelify rounded-lg" Align="Align.Center" Typo="Typo.h6" Style="backdrop-filter: blur(20px) brightness(.95);">
+                <MudText Class="text-white pixelify rounded-lg" Align="Align.Center" Typo="Typo.h6" Style="backdrop-filter: blur(20px) brightness(.9);">
                     Déjà inscrit ? Connecte-toi ici !
                 </MudText>
             </MudLink>

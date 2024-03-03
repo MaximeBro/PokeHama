@@ -1,8 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using PokeHama.Databases;
+using PokeHama.Extensions;
+using PokeHama.Models;
 using AuthenticationService = PokeHama.Services.AuthenticationService;
 using BC = BCrypt.Net.BCrypt;
 using Timer = System.Timers.Timer;
@@ -11,7 +15,7 @@ namespace PokeHama.Components.Pages;
 
 public partial class Login
 {
-    [Inject] public IDbContextFactory<UtiliyContext> UtilityFactory { get; set; } = null!;
+    [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
     [Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
 
@@ -34,11 +38,11 @@ public partial class Login
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var users = await utilityDb.Users.ToListAsync();
-        var user = users.FirstOrDefault(x => x.UserName == _username && BC.Verify(_password, x.Password));
+        var user = users.FirstOrDefault(x => x.Username == _username && BC.Verify(_password, x.Password));
 
         if (user != null)
         {
-            await AuthenticationService.SignInAsync(user);
+            NavManager.NavigateTo($"/api/authenticate/login?username={user.Username}&role={user.Role}", true);
         }
         else
         {

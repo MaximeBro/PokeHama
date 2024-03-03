@@ -1,0 +1,44 @@
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+<MudMenu Class="icon-hoverable white-all pa-1" PopoverClass="transparent" ListClass="darker-bg rounded-lg" Size="Size.Small" Icon="@Icons.AccountCircle" Style="border: 2px solid white; border-radius: 50%;" 
+         AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+    <MudStack Class="pt-1" Row="false" Spacing="0">
+        <div class="d-flex mx-4" style="align-items: center;">
+            <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">@(_username?[0].ToString() ?? "?")</MudAvatar>
+            <div>
+                <MudText Class="text-white">@_firstname @_lastname</MudText>
+                <MudLink Style="text-decoration-color: #fff;" Href="/">
+                    <MudText Class="text-white" Typo="Typo.caption" Style="font-size: 14px;">@($"@{_username}")</MudText>
+                </MudLink>
+            </div>
+        </div>
+        <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
+        <MudMenuItem Class="my-0 text-white c-menu-item"><MudIcon Class="text-white mr-3" Icon="@Icons.Share" /> Partager</MudMenuItem>
+        <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@Logout">
+            <MudIcon Class="text-white mr-3" Icon="@Icons.Logout"/>
+            Se déconnecter
+        </MudMenuItem>
+    </MudStack>
+</MudMenu>
+
+@code {
+    [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
+    [Inject] public NavigationManager NavManager { get; set; } = null!;
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+    
+    private string? _username;
+    private string? _firstname;
+    private string? _lastname;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var utilityDb = await UtilityFactory.CreateDbContextAsync();
+        var authenticationState = await AuthenticationStateTask;
+        _username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var user = utilityDb.Users.FirstOrDefault(x => x.Username == _username);
+        _firstname = user?.FirstName;
+        _lastname = user?.LastName;
+    }
+
+    private void Logout() => NavManager.NavigateTo("/api/authenticate/logout", true);
+}

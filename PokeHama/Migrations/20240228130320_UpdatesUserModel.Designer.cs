@@ -10,7 +10,7 @@ using PokeHama.Databases;
 
 namespace PokeHama.Migrations
 {
-    [DbContext(typeof(UtiliyContext))]
+    [DbContext(typeof(UtilityContext))]
     [Migration("20240228130320_UpdatesUserModel")]
     partial class UpdatesUserModel
     {

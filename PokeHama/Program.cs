@@ -11,16 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 var pathToData = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../data/")).FullName;
 
 /* Authentication (start) */
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.Cookie.Name = "auth_token";
+    options.LoginPath = "/connexion";
+});
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<HttpContextAccessor>();
-builder.Services.AddHttpClient();
-builder.Services.AddScoped<HttpClient>();
+builder.Services.AddControllers();
 /* Authentication (end) */
 
 /* Databases (start) */
-builder.Services.AddDbContextFactory<UtiliyContext>(options =>
+builder.Services.AddDbContextFactory<UtilityContext>(options =>
 {
     options.UseSqlite($"Data source={Path.Combine(pathToData, "db/utility.db")}");
 });
@@ -50,18 +51,19 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseAntiforgery();
 
+app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCookiePolicy();
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict});
 
+app.MapControllers();
 app.UseUploading(); // Used to send to client files stored on the server-side
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-await RunMigrationAsync < UtiliyContext>(app);
+await RunMigrationAsync<UtilityContext>(app);
 
 var fetchService = app.Services.GetRequiredService<FetchService>();
 var minigamesService = app.Services.GetRequiredService<MiniGamesService>();

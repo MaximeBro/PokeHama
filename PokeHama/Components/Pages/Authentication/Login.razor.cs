@@ -1,23 +1,20 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using PokeHama.Databases;
-using PokeHama.Extensions;
-using PokeHama.Models;
-using AuthenticationService = PokeHama.Services.AuthenticationService;
 using BC = BCrypt.Net.BCrypt;
 using Timer = System.Timers.Timer;
 
-namespace PokeHama.Components.Pages;
+namespace PokeHama.Components.Pages.Authentication;
 
 public partial class Login
 {
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
-    [Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
     private LoginModel _model = new();
     private bool _errorMessage;
@@ -30,8 +27,9 @@ public partial class Login
 
     protected override async Task OnInitializedAsync()
     {
-        var isAuthenticated = await AuthenticationService.IsAuthenticatedAsync();
-        if (isAuthenticated) NavManager.NavigateTo("/", true);
+        // Checks if the user is already authenticated
+        var authenticationState = await AuthenticationStateTask;
+        if (authenticationState.User.FindFirst(x => x.Type == ClaimTypes.Surname) != null) NavManager.NavigateTo("/", true);
     }
 
     private async Task TrySignInAsync()

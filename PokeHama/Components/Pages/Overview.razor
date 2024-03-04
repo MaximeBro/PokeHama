@@ -4,52 +4,40 @@
 
 <PageTitle>PokéHama</PageTitle>
 
-<section class="dark-bg" style="min-height: 100vh; width: 100%;">
-    <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pb-12">
-        <MudGrid Justify="Justify.Center">
-            <MudItem xs="2" Class="dark-bg">
-                <MudText Class="pt-16 text-white pixelify ml-6 mb-2" Typo="Typo.h5">Palette</MudText>
-                <MudGrid Justify="Justify.Center">
-                    @foreach (var color in _palette)
-                    {
-                        <MudTooltip Text="@($"{color}")" Arrow Placement="Placement.Top">
-                            <MudItem Class="ma-1" xs="2">
-                                <MudPaper Class="pa-10" Elevation="10" Style="@($"background-color: {color};")" Width="100%" Height="100%">
-                                    <MudIconButton Class="absolute" Icon="@Icons.ContentCopy" DisableElevation OnClick="@(async () => await CopyToClipboardAsync(color))"
-                                                   Style="@($"color: {(color == "#000000" ? "#424242" : "rgba(0, 0, 0, .5)")}!important;")"/>
-                                </MudPaper>
-                            </MudItem>
-                        </MudTooltip>
-                    }
-                </MudGrid>
-                <MudStack Class="mt-8 pt-12 px-2" Row="false" Justify="Justify.Center">
-                    <MudText Class="text-white pixelify ml-4 mb-n2" Typo="Typo.h5">Options</MudText>
-                    <MudStack Class="pa-2 mud-elevation-10 rounded" Row="false" Justify="Justify.Center" Spacing="0">
-                        <MudSwitch T="bool" @bind-Value="_toggleGrid" Class="text-white ml-2 pixelify" Label="Grille" ThumbIcon="@(_toggleGrid ? Icons.GridOn : Icons.GridOff)"
-                                   ThumbIconColor="@(_toggleGrid ? Color.Info : Color.Dark)" Size="Size.Large"/>
-                        <MudText Class="text-white pixelify">
-                            <MudIconButton Icon="@Icons.Fullscreen" Color="Color.Warning" OnClick="@(() => ToggleFullScreen(true))"/>
-                            Fullscreen
-                        </MudText>
-                        <MudSlider T="int" @bind-Value="_pixelSize" Class="text-white pixelify px-4 mb-5" Immediate Min="15" Max="25"
-                                   Color="Color.Warning" Variant="Variant.Filled" TickMarkLabels="@(new []{ "15", "", "", "", "", "", "", "", "", "", "25" })" TickMarks ValueLabel>
-                            Taille
-                        </MudSlider>
-                    </MudStack>
-                </MudStack>
-            </MudItem>
-            <MudItem xs="8">
-                @if (_image is null)
+<section class="dark-bg pb-12" style="min-height: 100vh; width: 100%;">
+    <MudGrid Class="pt-16" Justify="Justify.Center" Spacing="0">
+        <MudItem Class="px-2 dark-bg" xs="12" lg="2">
+            <MudText Class="text-white pixelify ml-6 mb-2" Typo="Typo.h5" GutterBottom>Palette</MudText>
+            <MudGrid Justify="Justify.Center">
+                @foreach (var color in _palette)
                 {
-                    return;
+                    <MudTooltip Text="@($"{color}")" Arrow Placement="Placement.Top">
+                        <MudItem Class="ma-1" xs="2">
+                            <MudPaper Class="pa-10" Elevation="10" Style="@($"background-color: {color};")" Width="100%" Height="100%">
+                                <MudIconButton Class="absolute" Icon="@Icons.ContentCopy" DisableElevation OnClick="@(async () => await CopyToClipboardAsync(color))"
+                                               Style="@($"color: {(color == "#000000" ? "#424242" : "rgba(0, 0, 0, .5)")}!important;")"/>
+                            </MudPaper>
+                        </MudItem>
+                    </MudTooltip>
                 }
-                <MudStack Class="pt-4" Row Justify="Justify.Center">
-                    <MudText Class="text-white pixelify" Align="Align.Center" Typo="Typo.h3">@_name</MudText>
-                </MudStack>
-                <MudStack Row Justify="Justify.Center">
-                    <MudPaper Elevation="25">
-                        <table style="border-collapse: collapse;">
-                            <tbody>
+            </MudGrid>
+        </MudItem>
+        <MudItem Class="px-4" xs="12" lg="8">
+            @if (_image is null)
+            {
+                return;
+            }
+            <MudStack Row Justify="Justify.Center">
+                <MudPaper Class="pa-2 darker-bg" Elevation="25">
+                    <table style="border-collapse: collapse; border-color: transparent!important;">
+                        <tbody>
+                            <tr style="background-color: transparent;">
+                                <td colspan="40" style="@($"{_gridStyle}");">
+                                    <MudText Class="pixelify text-white" Align="Align.Center" Typo="Typo.h3">
+                                        @_name
+                                    </MudText>
+                                </td>
+                            </tr>
                             @{
                                 int i = 0;
                                 for (int y = 0; y < _image.Height; y++)
@@ -57,22 +45,47 @@
                                     <tr style="background-color: black;">
                                         @for (int x = 0; x < _image.Width; x++, i++)
                                         {
-                                            <td class="pa-0 ma-0 scalable" style="@($"{_gridStyle} background: {_pixels[i]}; width: {_pixelSize}px!important; height: {_pixelSize}px!important;")">
-                                            </td>
+                                            <td class="pa-0 ma-0 scalable" style="@($"{_gridStyle} background: {_pixels[i]}; width: {_pixelSize}px!important; height: {_pixelSize}px!important;")"></td>
                                         }
                                     </tr>
                                 }
                             }
-                            </tbody>
-                        </table>
-                    </MudPaper>
-                </MudStack>
-            </MudItem>
-            <MudItem xs="2">
-
-            </MudItem>
-        </MudGrid>
-    </MudContainer>
+                        </tbody>
+                    </table>
+                </MudPaper>
+            </MudStack>
+        </MudItem>
+        <MudItem Class="px-4" xs="12" lg="2">
+            <MudText Class="text-white pixelify ml-4" Typo="Typo.h5" GutterBottom>Actions</MudText>
+            <MudStack Class="px-6 rounded" Row="false">
+                <div>
+                    <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Style="background: #CE4A42;" Size="Size.Large"
+                               StartIcon="@Icons.PlaylistAdd">
+                        Enregistrer
+                    </MudButton>
+                </div>
+                <div class="my-1">
+                    <MudButton Class="rounded-xl text-white pixelify" Variant="Variant.Filled" Color="Color.Tertiary" Size="Size.Large"
+                               StartIcon="@Icons.Download" OnClick="@DownloadPngAsync">
+                        Télécharger
+                    </MudButton>
+                </div>
+            </MudStack>
+            <MudText Class="mt-3 text-white pixelify" Typo="Typo.h5" GutterBottom>Options</MudText>
+            <MudStack Class="pa-2 mud-elevation-10 rounded" Row="false" Justify="Justify.Center" Spacing="0">
+                <MudSwitch T="bool" @bind-Value="_toggleGrid" Class="text-white ml-2 pixelify" Label="Grille" ThumbIcon="@(_toggleGrid ? Icons.GridOn : Icons.GridOff)"
+                           ThumbIconColor="@(_toggleGrid ? Color.Info : Color.Dark)" Size="Size.Large"/>
+                <MudText Class="text-white pixelify">
+                    <MudIconButton Icon="@Icons.Fullscreen" Color="Color.Warning" OnClick="@(() => ToggleFullScreen(true))"/>
+                    Fullscreen
+                </MudText>
+                <MudSlider T="int" @bind-Value="_pixelSize" Class="text-white pixelify px-4 mb-5" Immediate Min="15" Max="25"
+                           Color="Color.Warning" Variant="Variant.Filled" TickMarkLabels="@(new []{ "15", "", "", "", "", "", "", "", "", "", "25" })" TickMarks ValueLabel>
+                    Taille
+                </MudSlider>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
 </section>
 <script src="/js/fullscreen-handler.js"></script>
 

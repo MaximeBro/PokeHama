@@ -21,28 +21,11 @@
 </MudAppBar>
 
 @code {
-    [Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
 
     private int _easterBall = 0;
     private string _easterBallClass = "ball icon-hoverable";
     private Timer _ballTimer = new Timer(2950);
-    
-    private UserModel? _user;
-
-    protected override void OnInitialized()
-    {
-        AuthenticationService.OnSignOutAsync += async () => { await InvokeAsync(StateHasChanged); NavManager.NavigateTo("/", true); };
-        AuthenticationService.OnSignInAsync += async () => await RefreshAuthenticationStateAsync();
-    }
-
-    private Task RefreshAuthenticationStateAsync()
-    {
-        _user = AuthenticationService.User;
-        StateHasChanged();
-
-        return Task.CompletedTask;
-    }
 
     private void Random()
     {
@@ -56,18 +39,18 @@
         if (_easterBall % 5 == 0 && !_ballTimer.Enabled)
         {
             _easterBallClass = "easter-ball icon-hoverable";
-            _ballTimer.Elapsed += Stop;
+            _ballTimer.Elapsed += StopBallTimer;
             _ballTimer.Start();
         }
     }
 
-    private void Stop(object? sender, ElapsedEventArgs e)
+    private void StopBallTimer(object? sender, ElapsedEventArgs e)
     {
         if (_ballTimer.Enabled)
         {
             _easterBallClass = "ball";
             _ballTimer.Stop();
-            _ballTimer.Elapsed -= Stop;
+            _ballTimer.Elapsed -= StopBallTimer;
             _ = InvokeAsync(StateHasChanged);
         }
     }

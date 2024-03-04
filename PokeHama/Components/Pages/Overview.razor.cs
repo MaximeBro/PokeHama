@@ -66,4 +66,13 @@ public partial class Overview
         _toggleFullScreen = toggle;
         StateHasChanged();
     }
+    
+    private async Task DownloadPngAsync()
+    {
+        var client = new HttpClient();
+        var fileStream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
+        var dotnetStream = new DotNetStreamReference(fileStream);
+        
+        await JsRuntime.InvokeVoidAsync("downloadFileFromStream", $"{_name}.png", dotnetStream);
+    }
 }

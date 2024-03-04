@@ -7,11 +7,16 @@
             <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">@(_username?[0].ToString() ?? "?")</MudAvatar>
             <div>
                 <MudText Class="text-white">@_firstname @_lastname</MudText>
-                <MudLink Style="text-decoration-color: #fff;" Href="/">
+                <MudLink Style="text-decoration-color: #fff;" Href="@($"/profile-overview/{_username}")">
                     <MudText Class="text-white" Typo="Typo.caption" Style="font-size: 14px;">@($"@{_username}")</MudText>
                 </MudLink>
             </div>
         </div>
+        <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
+        <MudMenuItem Class="my-0 text-white c-menu-item" Href="/profile">
+            <MudIcon Class="text-white mr-3" Icon="@Hardcoded.PokeBallIcon"/>
+            Compte Hama
+        </MudMenuItem>
         <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
         <MudMenuItem Class="my-0 text-white c-menu-item"><MudIcon Class="text-white mr-3" Icon="@Icons.Share" /> Partager</MudMenuItem>
         <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@Logout">

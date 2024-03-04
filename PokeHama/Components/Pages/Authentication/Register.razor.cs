@@ -3,16 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using PokeHama.Databases;
 using PokeHama.Models;
-using PokeHama.Services;
 using Timer = System.Timers.Timer;
 using BC = BCrypt.Net.BCrypt;
 
-namespace PokeHama.Components.Pages;
+namespace PokeHama.Components.Pages.Authentication;
 
 public partial class Register
 {
 	[Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
-	[Inject] public AuthenticationService AuthenticationService { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
 
 	private MudForm _form;

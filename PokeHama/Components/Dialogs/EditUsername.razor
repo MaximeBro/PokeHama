@@ -7,7 +7,7 @@
         </MudStack>
     </TitleContent>
     <DialogContent>
-        <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify" Variant="Variant.Filled" Label="Identifiant"/>
+        <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify" Variant="Variant.Filled" Label="@("@Identifiant")"/>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Tertiary" OnClick="@SubmitEdit">Enregistrer</MudButton>
@@ -29,15 +29,24 @@
 
     private void SubmitEdit()
     {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
         if (string.IsNullOrWhiteSpace(_username))
         {
-            Snackbar.Add("Identifiant invalide !", Severity.Error);
+            Snackbar.Add("Identifiant invalide !", Severity.Error, options =>
+            {
+                options.VisibleStateDuration = 2000;
+                options.ShowCloseIcon = false;
+            });
             return;
         }
         
         if (Usernames.Contains(_username))
         {
-            Snackbar.Add("Un autre utilisateur possède déjà cet identifiant, veuillez en trouver un autre.", Severity.Error);
+            Snackbar.Add("Un autre utilisateur possède déjà cet identifiant, veuillez en trouver un autre.", Severity.Error, options =>
+            {
+                options.VisibleStateDuration = 2000;
+                options.ShowCloseIcon = false;
+            });
             return;
         }
         

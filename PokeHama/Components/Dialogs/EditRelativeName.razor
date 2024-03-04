@@ -1,0 +1,43 @@
+﻿<MudDialog Class="tabpanel-bg">
+    <TitleContent>
+        <MudStack Class="mt-n2" Row AlignItems="AlignItems.Center" Spacing="0">
+            <MudText Typo="Typo.h6" Class="text-white pixelify">Modification de vos informations personnelles</MudText>
+            <MudSpacer />
+            <MudIconButton Class="text-white hoverable-circle mr-n4" Icon="@Icons.Close" OnClick="@(() => Dialog.Close())"/>
+        </MudStack>
+    </TitleContent>
+    <DialogContent>
+        <MudStack Row Justify="Justify.Center" Spacing="0">
+            <MudTextField T="string" @bind-Value="_firstname" Class="white-all pixelify mr-2" Variant="Variant.Filled" Label="Prénom"/>
+            <MudTextField T="string" @bind-Value="_lastname" Class="white-all pixelify ml-2" Variant="Variant.Filled" Label="Nom"/>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Tertiary" OnClick="@SubmitEdit">Enregistrer</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public string Firstname { get; set; } = null!;
+    [Parameter] public string Lastname { get; set; } = null!;
+
+    private string _firstname = null!;
+    private string _lastname = null!;
+
+    protected override void OnInitialized()
+    {
+        _firstname = Firstname;
+        _lastname = Lastname;
+    }
+
+    private void SubmitEdit()
+    {
+        var data = new Dictionary<string, string>()
+        {
+            { "firstname", _firstname },
+            { "lastname", _lastname }
+        };
+        Dialog.Close(data);
+    }
+}

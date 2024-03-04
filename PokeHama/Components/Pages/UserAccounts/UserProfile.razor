@@ -12,7 +12,7 @@
                     <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
                         <MudStack Class="pt-2 pb-8" Row="false" Justify="Justify.Center" Spacing="0">
                             <MudStack Class="mb-2" Row Justify="Justify.Center">
-                                <MudBadge Class="hover-pointer" Icon="@Icons.Edit" Overlap Color="Color.Dark" OnClick="@EditUsernameAsync" Bordered>
+                                <MudBadge Class="hover-pointer" Icon="@Icons.Edit" Overlap Color="Color.Dark" OnClick="@EditPfpAsync" Bordered>
                                     <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
                                 </MudBadge>
                             </MudStack>
@@ -24,7 +24,6 @@
                             <MudStack Class="mt-2" Row>
                                 <MudTextField T="string" Class="white-all pixelify" Value="_user!.FirstName" Adornment="Adornment.End" AdornmentIcon="@Icons.Edit"
                                               Variant="Variant.Filled" OnAdornmentClick="@EditRelativeNameAsync" ReadOnly Label="Prénom"/>
-
                                 <MudTextField T="string" Class="white-all pixelify" Value="_user!.LastName" Adornment="Adornment.End" AdornmentIcon="@Icons.Edit"
                                               Variant="Variant.Filled" OnAdornmentClick="@EditRelativeNameAsync" ReadOnly Label="Nom"/>
                             </MudStack>

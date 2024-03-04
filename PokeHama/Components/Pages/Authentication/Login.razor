@@ -11,7 +11,7 @@
                     <MudStack Row="false" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center" Style="min-width: 260px;">
                         <EditForm Model="@_model" OnValidSubmit="@TrySignInAsync">
                             <MudStack Row>
-                                <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify my-3" Label="@($"@Identifiant")" Variant="Variant.Filled"
+                                <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify my-3" Label="@("@Identifiant")" Variant="Variant.Filled"
                                               Required For="@(() => _model.Username)" Style="min-width: 300px;"/>
                             </MudStack>
                             

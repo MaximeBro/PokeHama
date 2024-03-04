@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using PokeHama.Databases;
 using PokeHama.Models;
+using PokeHama.Models.Account;
+using PokeHama.Models.Account.Enums;
 using Timer = System.Timers.Timer;
 using BC = BCrypt.Net.BCrypt;
 
@@ -13,7 +15,7 @@ public partial class Register
 	[Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
 
-	private MudForm _form;
+	private MudForm _form = null!;
 	private RegisterModel _model = new();
 	private bool _isValid;
 
@@ -63,6 +65,11 @@ public partial class Register
 
 			_loading = true;
 			utilityDb.Users.Add(user);
+			utilityDb.UsersData.Add(new UserData
+			{
+				Username = user.Username,
+				Pfp = $"{new Random().Next(1, 8)}.png"
+			});
 			await utilityDb.SaveChangesAsync();
 			await utilityDb.DisposeAsync();
 			_loading = false;

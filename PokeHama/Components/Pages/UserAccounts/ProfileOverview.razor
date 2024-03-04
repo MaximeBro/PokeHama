@@ -1,3 +1,41 @@
 ﻿@page "/profile-overview/{username?}"
 
 <PageTitle>PokéHama</PageTitle>
+
+<section class="mud-grid profile-pika-bg" style="min-height: 100vh; width: 100%; justify-content: center; align-items: center; margin-top: -32px!important;">
+    <MudItem xs="12" sm="6" md="4">
+        <MudPaper Class="centered-h rounded-lg px-8 pt-4" Elevation="20" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
+            <MudStack Row="false" Justify="Justify.Center" Spacing="0">
+                <MudStack Row Justify="Justify.Center">
+                    <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="100" Style="border-radius: 50%; user-select: none;"/>
+                </MudStack>
+                <MudText Class="text-white pixelify mt-2" Align="Align.Center" GutterBottom Style="font-size: 24px;">
+                    @($"@{Username}")
+                    @if (_isPublic)
+                    {
+                        <MudTooltip Class="pixelify" Text="@($"{_user!.FirstName} {_user!.LastName}")" Arrow Placement="Placement.Right">
+                            <MudIcon Class="text-white ml-1" Icon="@Icons.Info" Size="Size.Small" />
+                        </MudTooltip>
+                    }
+                </MudText>
+                <MudText Class="text-white fffforwa" Style="font-size: 10px;" Align="Align.Center" GutterBottom>51 ami(e)s</MudText>
+                @if (_currentUser != null && _currentUser != Username)
+                {
+                    <MudStack Class="mt-1" Row Justify="Justify.Center">
+                        <MudButton Class="fffforwa" StartIcon="@Icons.PersonAdd" IconSize="Size.Small" Size="Size.Small" Color="Color.Secondary" Variant="Variant.Filled" 
+                                   Style="text-transform: none!important; font-size: 8px;">
+                            Ami(e)s
+                        </MudButton>
+                        <div>
+                            <MudIconButton Class="text-white" Icon="@Icons.Share" Size="Size.Small"/>
+                        </div>
+                    </MudStack>
+                }
+                <div class="my-4">
+                    <MudDivider Class="mx-auto" DividerType="DividerType.Middle" Style="max-width: 200px;" />
+                </div>
+                <MudText Class="text-white pixelify" Align="Align.Center" GutterBottom>Ce compte est @_isPublicText</MudText>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+</section>

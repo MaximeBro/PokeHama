@@ -25,7 +25,7 @@
                             <div>
                                 <MudTextField T="string" @bind-Value="_model.Username" Class="white-all pixelify mb-2" Label="@($"@Identifiant")" 
                                               Variant="Variant.Filled" For="@(() => _model.Username)" OnlyValidateIfDirty Style="min-width: 260px;"
-                                              Required RequiredError="Veuillez renseigner un identifiant"/>
+                                              Required RequiredError="Veuillez renseigner un identifiant" MaxLength="50"/>
                             </div>
                             <MudStack Row>
                                 <MudTextField T="string" @bind-Value="_model.Password" Class="white-all pixelify" Label="Mot de passe" Variant="Variant.Filled"

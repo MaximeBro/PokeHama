@@ -1,5 +1,9 @@
 /* FONTS */
 @import 'https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap';
+@font-face {
+    font-family: 'FFFFORWA';
+    src: url('./fonts/FFFFORWA/FFFFORWA.TTF');
+}
 /* FONTS */
 
 * { outline: none!important; }
@@ -9,6 +13,7 @@ html, body {
 }
 
 .text-white { color: #fff!important; }
+.text-red { color: #CE4A42!important; }
 .text-yellow { color: #FF9800!important; }
 
 .yellow-bg { background-color: #FF9800!important; }
@@ -21,6 +26,11 @@ html, body {
 .pixelify, .pixelify * {
     font-family: 'Pixelify Sans', sans-serif!important;
     font-weight: 300!important;
+}
+
+.fffforwa, .fffforwa * {
+    font-family: 'FFFFORWA', sans-serif!important;
+    font-weight: 100!important;
 }
 
 .pixel-rendered { image-rendering: pixelated; }
@@ -54,6 +64,15 @@ html, body {
 .hoverable:hover {
     background-color: rgba(0, 0, 0, .15)!important;
     border-radius: 4px!important;
+}
+
+.hoverable-circle:hover {
+    background-color: rgba(0, 0, 0, .15)!important;
+    border-radius: 50%!important;
+}
+
+.hoverable-square:hover {
+    background-color: rgba(0, 0, 0, .15)!important;
 }
 
 .icon-hoverable:hover {
@@ -151,6 +170,15 @@ table {
     z-index: 1399!important;
 }
 
+.hover-pointer .mud-badge {
+    cursor: pointer;
+}
+
+.tabpanel-bg {
+    backdrop-filter: blur(4px) brightness(.6)!important;
+    background: transparent!important;
+}
+
 .pika-wp {
     height: 100%!important;
     width: 100%!important;
@@ -161,8 +189,15 @@ table {
     overflow: clip;
 }
 
-.teams-bg {
-    background: url("/_content/pictures/pokehama-hub.jpg");
+.mammouth-bg {
+    background-image: url("../_content/pictures/mammouth-bg.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.profile-pika-bg {
+    background-image: url("../_content/pictures/profile-pika.jpg");
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

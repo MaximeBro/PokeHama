@@ -1,14 +1,21 @@
-@using System.Security.Claims
-@using Microsoft.EntityFrameworkCore
 <MudMenu Class="icon-hoverable white-all pa-1" PopoverClass="transparent" ListClass="darker-bg rounded-lg" Size="Size.Small" Icon="@Icons.AccountCircle" Style="border: 2px solid white; border-radius: 50%;" 
          AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
     <MudStack Class="pt-1" Row="false" Spacing="0">
         <div class="d-flex mx-4" style="align-items: center;">
-            <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">@(_username?[0].ToString() ?? "?")</MudAvatar>
+            <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">
+                @if (!_data!.ImagePfp)
+                {
+                    <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                }
+                else
+                {
+                    @(_user!.Username[0].ToString())
+                }
+            </MudAvatar>
             <div>
-                <MudText Class="text-white">@_firstname @_lastname</MudText>
-                <MudLink Style="text-decoration-color: #fff;" Href="@($"/profile-overview/{_username}")">
-                    <MudText Class="text-white" Typo="Typo.caption" Style="font-size: 14px;">@($"@{_username}")</MudText>
+                <MudText Class="text-white">@_user!.FirstName @_user.LastName</MudText>
+                <MudLink Style="text-decoration-color: #fff;" OnClick="@(()  => NavManager.NavigateTo($"/profile-overview/{_user!.Username}", true))">
+                    <MudText Class="text-white" Typo="Typo.caption" Style="font-size: 14px;">@($"@{_user!.Username}")</MudText>
                 </MudLink>
             </div>
         </div>
@@ -30,19 +37,22 @@
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
-    
-    private string? _username;
-    private string? _firstname;
-    private string? _lastname;
+
+    private UserModel? _user;
+    private UserData? _data;
 
     protected override async Task OnInitializedAsync()
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var authenticationState = await AuthenticationStateTask;
-        _username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
-        var user = utilityDb.Users.FirstOrDefault(x => x.Username == _username);
-        _firstname = user?.FirstName;
-        _lastname = user?.LastName;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        _user = utilityDb.Users.FirstOrDefault(x => x.Username == username);
+        _data = utilityDb.UsersData.FirstOrDefault(x => x.Username == username);
+
+        if (_user is null || _data is null)
+        {
+            NavManager.NavigateTo("/", true);
+        }
     }
 
     private void Logout() => NavManager.NavigateTo("/api/authenticate/logout", true);

@@ -35,6 +35,6 @@ public class AuthenticateController : Controller
     public async Task<IActionResult> OnLogoutAsync()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return Redirect("/");
+        return Redirect("/connexion");
     }
 }

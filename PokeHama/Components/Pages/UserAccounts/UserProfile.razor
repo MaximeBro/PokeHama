@@ -2,3 +2,69 @@
 @attribute [Authorize(Roles = "Admin, User")]
 
 <PageTitle>PokéHama</PageTitle>
+
+<section class="mud-grid profile-pika-bg" style="min-height: 100vh; width: 100%; justify-content: center; align-items: center; margin-top: -32px!important;">
+    <MudItem xs="12" sm="6" md="4">
+        <MudStack Row="false" Justify="Justify.Center">
+            <MudTabs Class="tabpanel-bg" Centered Outlined Rounded TabHeaderClass="tabpanel-bg" AlwaysShowScrollButtons="false" ActivePanelIndex="@SelectedTab">
+                @* Personal information *@
+                <MudTabPanel Class="text-white hoverable-square" Icon="@Icons.AccountCircle" Text="Votre espace">
+                    <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
+                        <MudStack Class="pt-2 pb-8" Row="false" Justify="Justify.Center" Spacing="0">
+                            <MudStack Class="mb-2" Row Justify="Justify.Center">
+                                <MudBadge Class="hover-pointer" Icon="@Icons.Edit" Overlap Color="Color.Dark" OnClick="@EditUsernameAsync" Bordered>
+                                    <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                                </MudBadge>
+                            </MudStack>
+                            <MudText Class="text-white fffforwa" Align="Align.Center" GutterBottom>
+                                @_user!.FirstName @_user!.LastName
+                            </MudText>
+                            <MudTextField T="string" Class="white-all pixelify" Value="@($"@{_user!.Username}")" Adornment="Adornment.End" AdornmentIcon="@Icons.Edit"
+                                          Variant="Variant.Filled" OnAdornmentClick="@EditUsernameAsync" ReadOnly Label="Identifiant"/>
+                            <MudStack Class="mt-2" Row>
+                                <MudTextField T="string" Class="white-all pixelify" Value="_user!.FirstName" Adornment="Adornment.End" AdornmentIcon="@Icons.Edit"
+                                              Variant="Variant.Filled" OnAdornmentClick="@EditRelativeNameAsync" ReadOnly Label="Prénom"/>
+
+                                <MudTextField T="string" Class="white-all pixelify" Value="_user!.LastName" Adornment="Adornment.End" AdornmentIcon="@Icons.Edit"
+                                              Variant="Variant.Filled" OnAdornmentClick="@EditRelativeNameAsync" ReadOnly Label="Nom"/>
+                            </MudStack>
+                            <MudStack Class="mt-2" Row>
+                                <MudTextField T="string" Class="white-all pixelify" Value="@($"{new string('*', _user.Password.Length)}")" Adornment="Adornment.End" AdornmentIcon="@Icons.Edit"
+                                              Variant="Variant.Filled" OnAdornmentClick="@EditPasswordAsync" ReadOnly Label="Mot de passe"/>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+                </MudTabPanel>
+
+                @* Friends *@
+                <MudTabPanel Class="text-white hoverable-square" Icon="@Icons.PeopleAlt" Text="Amis">
+                    <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
+
+                    </MudPaper>
+                </MudTabPanel>
+
+                @* Account security *@
+                <MudTabPanel Class="text-red hoverable-square" Icon="@Icons.PeopleAlt" Text="Sécurité">
+                    <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
+                        <MudStack Class="pt-2 pb-8" Row="false" Justify="Justify.Center" Spacing="0">
+                            <MudSelect T="AccountPrivacy" Value="_accountPrivacy" ValueChanged="@EditAccountPrivacyAsync" Class="white-all pixelify" Label="Status du compte" 
+                                       Variant="Variant.Filled" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                                <MudSelectItem Value="AccountPrivacy.Public">Public</MudSelectItem>
+                                <MudSelectItem Value="AccountPrivacy.Private">Privé</MudSelectItem>
+                            </MudSelect>
+                            <MudText Class="text-white pixelify my-2" Align="Align.Center" GutterBottom>
+                                Votre compte est 
+                                <span style=@($"text-decoration: underline; color: {(IsPublic ? "#0BBA83" : "#FF3A30")};")>
+                                    @PrivacyText
+                                </span>.
+                            </MudText>
+                            <MudAlert Severity="Severity.Info">
+                                Si votre compte est privé les autres utilisateurs ne pourront pas voir certaines de vos informations personnelles comme votre prénom et votre nom.
+                            </MudAlert>
+                        </MudStack>
+                    </MudPaper>
+                </MudTabPanel>
+            </MudTabs>
+        </MudStack>
+    </MudItem>
+</section>

@@ -1,0 +1,46 @@
+﻿<MudDialog Class="tabpanel-bg">
+    <TitleContent>
+        <MudStack Class="mt-n2" Row AlignItems="AlignItems.Center" Spacing="0">
+            <MudText Typo="Typo.h6" Class="text-white pixelify">Modification de votre identifiant</MudText>
+            <MudSpacer />
+            <MudIconButton Class="text-white hoverable-circle mr-n4" Icon="@Icons.Close" OnClick="@(() => Dialog.Close())"/>
+        </MudStack>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField T="string" @bind-Value="_username" Class="white-all pixelify" Variant="Variant.Filled" Label="Identifiant"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Tertiary" OnClick="@SubmitEdit">Enregistrer</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Inject] ISnackbar Snackbar { get; set; } = null!;
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public string Username { get; set; } = null!;
+    [Parameter] public List<string> Usernames { get; set; } = null!;
+
+    private string _username = null!;
+
+    protected override void OnInitialized()
+    {
+        _username = Username;
+    }
+
+    private void SubmitEdit()
+    {
+        if (string.IsNullOrWhiteSpace(_username))
+        {
+            Snackbar.Add("Identifiant invalide !", Severity.Error);
+            return;
+        }
+        
+        if (Usernames.Contains(_username))
+        {
+            Snackbar.Add("Un autre utilisateur possède déjà cet identifiant, veuillez en trouver un autre.", Severity.Error);
+            return;
+        }
+        
+        Dialog.Close(_username);
+    }
+}

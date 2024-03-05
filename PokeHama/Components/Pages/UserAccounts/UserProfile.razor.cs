@@ -8,6 +8,7 @@ using PokeHama.Databases;
 using PokeHama.Extensions;
 using PokeHama.Models.Account;
 using PokeHama.Models.Account.Enums;
+using PokeHama.Services;
 using BC = BCrypt.Net.BCrypt;
 
 namespace PokeHama.Components.Pages.UserAccounts;
@@ -15,6 +16,7 @@ namespace PokeHama.Components.Pages.UserAccounts;
 public partial class UserProfile
 {
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
+    [Inject] public UserService UserService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
     [Inject] public IDialogService DialogService { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
@@ -159,5 +161,6 @@ public partial class UserProfile
 
         _accountPrivacy = _data!.AccountPrivacy;
         SelectedTab = tab;
+        await UserService.InvokeUserDataChanged();
     }
 }

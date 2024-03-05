@@ -35,6 +35,7 @@ builder.Services.AddMudServices();
 /* Custom Services (start) */
 builder.Services.AddSingleton<FetchService>();
 builder.Services.AddSingleton<MiniGamesService>();
+builder.Services.AddSingleton<UserService>();
 /*Custom services (end) */
 
 var app = builder.Build();

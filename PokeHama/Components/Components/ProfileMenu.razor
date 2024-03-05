@@ -35,6 +35,7 @@
 
 @code {
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
+    [Inject] public UserService UserService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
@@ -42,6 +43,13 @@
     private UserData? _data;
 
     protected override async Task OnInitializedAsync()
+    {
+        await RefreshDataAsync();
+
+        UserService.OnUserDataChanged += RefreshDataAsync;
+    }
+
+    private async Task RefreshDataAsync()
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var authenticationState = await AuthenticationStateTask;

@@ -25,7 +25,7 @@
             Compte Hama
         </MudMenuItem>
         <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
-        <MudMenuItem Class="my-0 text-white c-menu-item"><MudIcon Class="text-white mr-3" Icon="@Icons.Share" /> Partager</MudMenuItem>
+        <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@CopyToClipboardAsync"><MudIcon Class="text-white mr-3" Icon="@Icons.Share" /> Partager</MudMenuItem>
         <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@Logout">
             <MudIcon Class="text-white mr-3" Icon="@Icons.Logout"/>
             Se déconnecter
@@ -37,6 +37,8 @@
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
     [Inject] public UserService UserService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
+    [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] public ISnackbar Snackbar { get; set; } = null!;
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
     private UserModel? _user;
@@ -61,6 +63,13 @@
         {
             NavManager.NavigateTo("/", true);
         }
+    }
+
+    private async Task CopyToClipboardAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"pokehama.fr/profile-overview/{_user!.Username}");
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+        Snackbar.Add("Lien copié dans le presse papier.", Severity.Success);
     }
 
     private void Logout() => NavManager.NavigateTo("/api/authenticate/logout", true);

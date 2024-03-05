@@ -24,10 +24,10 @@
                     <MudStack Class="mt-1" Row Justify="Justify.Center">
                         <MudButton Class="fffforwa" StartIcon="@Icons.PersonAdd" IconSize="Size.Small" Size="Size.Small" Color="Color.Secondary" Variant="Variant.Filled" 
                                    Style="text-transform: none!important; font-size: 8px;">
-                            Ami(e)s
+                            Ami(e)
                         </MudButton>
                         <div>
-                            <MudIconButton Class="text-white" Icon="@Icons.Share" Size="Size.Small"/>
+                            <MudIconButton Class="text-white" Icon="@Icons.Share" Size="Size.Small" OnClick="@CopyToClipboardAsync"/>
                         </div>
                     </MudStack>
                 }
@@ -35,6 +35,29 @@
                     <MudDivider Class="mx-auto" DividerType="DividerType.Middle" Style="max-width: 200px;" />
                 </div>
                 <MudText Class="text-white pixelify" Align="Align.Center" GutterBottom>Ce compte est @_isPublicText</MudText>
+                @if (_isPublic || (_currentUser != null && _currentUser == Username))
+                {
+                    <MudTabs Class="my-2" TabHeaderClass="tabpanel-bg" Outlined="false" Rounded Centered SliderColor="Color.Warning">
+                        <MudTabPanel Class="tabpanel-tab white-tab fffforwa" Text="Collection" Style="font-size: 12px;">
+                            <MudGrid Class="my-4" Justify="Justify.Center" Style="max-height: 250px; overflow-y: scroll;">
+                                @foreach (var pokemon in _collection)
+                                {
+                                    <MudItem xs="6" sm="4" md="4" lg="4" xl="3">
+                                        <div class="collection-item" style="max-width: 150px; max-height: 150px;">
+                                            <MudLink Href="@($"/overview/{pokemon.Key}")">
+                                                <MudImage Class="pixel-rendered" Src="@pokemon.Value" Height="100" Style="border-radius: 50%; user-select: none;"/>
+                                            </MudLink>
+                                        </div>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        </MudTabPanel>
+                        
+                        <MudTabPanel Class="tabpanel-tab white-tab fffforwa" Text="Amis" Style="font-size: 12px;">
+                            
+                        </MudTabPanel>
+                    </MudTabs>
+                }
             </MudStack>
         </MudPaper>
     </MudItem>

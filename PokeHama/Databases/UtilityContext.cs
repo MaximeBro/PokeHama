@@ -8,6 +8,7 @@ public class UtilityContext : DbContext
 {
     public DbSet<UserModel> Users { get; set; }
     public DbSet<UserData> UsersData { get; set; }
+    public DbSet<UserCollection> UsersCollections { get; set; }
 
     public UtilityContext(DbContextOptions<UtilityContext> options) : base(options) { }
 }

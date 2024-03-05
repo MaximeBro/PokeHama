@@ -32,7 +32,7 @@
                     <table style="border-collapse: collapse; border-color: transparent!important;">
                         <tbody>
                             <tr style="background-color: transparent;">
-                                <td colspan="40" style="@($"{_gridStyle}");">
+                                <td colspan="@_headerColspan" style="@($"{_gridStyle}");">
                                     <MudText Class="pixelify text-white" Align="Align.Center" Typo="Typo.h3">
                                         @_name
                                     </MudText>
@@ -42,10 +42,26 @@
                                 int i = 0;
                                 for (int y = 0; y < _image.Height; y++)
                                 {
+                                    int line = y;
                                     <tr style="background-color: black;">
+                                        @if (_toggleLegend)
+                                        {
+                                            <td class="dark-bg"><MudText Class="text-white pixelify" Align="Align.Center">@($"{line + 1}")</MudText></td>
+                                        }
                                         @for (int x = 0; x < _image.Width; x++, i++)
                                         {
-                                            <td class="pa-0 ma-0 scalable" style="@($"{_gridStyle} background: {_pixels[i]}; width: {_pixelSize}px!important; height: {_pixelSize}px!important;")"></td>
+                                            <td class="@($"pa-0 ma-0 {_scaleStyle}")" style="@($"{_gridStyle} background: {_pixels[i]}; width: {_pixelSize}px!important; height: {_pixelSize}px!important;")"></td>
+                                        }
+                                    </tr>
+                                }
+                                @if (_toggleLegend)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        @for (int x = 0; x < _image.Width; x++)
+                                        {
+                                        int cell = x;
+                                        <td class="dark-bg"><MudText Class="text-white pixelify" Align="Align.Center">@($"{cell + 1}")</MudText></td>
                                         }
                                     </tr>
                                 }
@@ -58,12 +74,25 @@
         <MudItem Class="px-4" xs="12" lg="2">
             <MudText Class="text-white pixelify ml-4" Typo="Typo.h5" GutterBottom>Actions</MudText>
             <MudStack Class="px-6 rounded" Row="false">
-                <div>
-                    <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Style="background: #CE4A42;" Size="Size.Large"
-                               StartIcon="@Icons.PlaylistAdd">
-                        Enregistrer
-                    </MudButton>
-                </div>
+                    @if (_isConnected)
+                    {
+                        <div>
+                        @if (_canAddToCollection)
+                        {
+                            <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Style="background: #CE4A42;" Size="Size.Large"
+                                       StartIcon="@Icons.PlaylistAdd" OnClick="@AddToCollectionAsync">
+                                Enregistrer
+                            </MudButton>
+                        }
+                        else
+                        {
+                            <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Size="Size.Large" Color="Color.Success"
+                                       StartIcon="@Icons.PlaylistAddCheck" OnClick="@RemoveFromCollectionAsync">
+                                Enregistré
+                            </MudButton>
+                        }
+                        </div>
+                    }
                 <div class="my-1">
                     <MudButton Class="rounded-xl text-white pixelify" Variant="Variant.Filled" Color="Color.Tertiary" Size="Size.Large"
                                StartIcon="@Icons.Download" OnClick="@DownloadPngAsync">
@@ -75,13 +104,19 @@
             <MudStack Class="pa-2 mud-elevation-10 rounded" Row="false" Justify="Justify.Center" Spacing="0">
                 <MudSwitch T="bool" @bind-Value="_toggleGrid" Class="text-white ml-2 pixelify" Label="Grille" ThumbIcon="@(_toggleGrid ? Icons.GridOn : Icons.GridOff)"
                            ThumbIconColor="@(_toggleGrid ? Color.Info : Color.Dark)" Size="Size.Large"/>
+                <MudSwitch T="bool" @bind-Value="_toggleLegend" Class="text-white ml-2 pixelify" Label="Indices" ThumbIcon="@(_toggleLegend ? Icons.AddChart : Icons.CropSquare)"
+                           ThumbIconColor="@(_toggleLegend ? Color.Info : Color.Dark)" Size="Size.Large"/>
                 <MudText Class="text-white pixelify">
                     <MudIconButton Icon="@Icons.Fullscreen" Color="Color.Warning" OnClick="@(() => ToggleFullScreen(true))"/>
                     Fullscreen
                 </MudText>
+                <MudStack Class="px-3 my-2" Row AlignItems="AlignItems.Center">
+                    <MudIcon Class="text-white" Icon="@Icons.Info"/>
+                    <MudText Class="text-white pixelify">Taille du hama 40x30</MudText>
+                </MudStack>
                 <MudSlider T="int" @bind-Value="_pixelSize" Class="text-white pixelify px-4 mb-5" Immediate Min="15" Max="25"
                            Color="Color.Warning" Variant="Variant.Filled" TickMarkLabels="@(new []{ "15", "", "", "", "", "", "", "", "", "", "25" })" TickMarks ValueLabel>
-                    Taille
+                    Taille des pixels
                 </MudSlider>
             </MudStack>
         </MudItem>

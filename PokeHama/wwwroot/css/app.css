@@ -132,7 +132,7 @@ html, body {
     }
     
     50% {
-        opacity: 0;
+        opacity: 0.1;
     }
 }
 
@@ -177,6 +177,26 @@ table {
 .tabpanel-bg {
     backdrop-filter: blur(4px) brightness(.35)!important;
     background: transparent!important;
+}
+
+.tabpanel-tab {
+    text-transform: none!important;
+}
+
+.collection-item { transition: ease-in-out .3s; }
+.collection-item:hover {
+    background: rgba(255, 255, 255, .1);
+}
+
+.collection-item:hover > * img {
+    transition: ease-in-out .3s;
+    animation: blinker linear 1.5s infinite;
+}
+
+.white-tab, .white-tab *, .white-tab .mud-tab-slider {
+    color: white!important;
+    background-color: transparent!important;
+    border-color: white!important;
 }
 
 .pika-wp {

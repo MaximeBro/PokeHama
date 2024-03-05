@@ -1,7 +1,12 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
+using PokeHama.Databases;
 using PokeHama.Extensions;
+using PokeHama.Models.Account;
 using PokeHama.Services;
 using SkiaSharp;
 using Color = System.Drawing.Color;
@@ -10,7 +15,9 @@ namespace PokeHama.Components.Pages;
 
 public partial class Overview
 {
+    [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
     [Inject] public FetchService FetchService { get; set; } = null!;
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
     [Parameter] public int Id { get; set; }
 
     private readonly List<string> _pixels = new();
@@ -18,13 +25,20 @@ public partial class Overview
     private SKBitmap _image = null!;
     private string _name = string.Empty;
 
+    private bool _isConnected;
+    private bool _canAddToCollection;
+    
     private bool _toggleGrid = true;
-    private bool _toggleFullScreen = false;
+    private bool _toggleLegend;
+    private bool _toggleFullScreen;
     private int _pixelSize = 25;
     private string _gridStyle => _toggleGrid ? "border: thin solid #424242;" : string.Empty;
+    private string _scaleStyle => _toggleGrid ? "scalable" : string.Empty;
+    private int _headerColspan => _toggleLegend ? 41 : 40;
 
     protected override async Task OnInitializedAsync()
     {
+        await RefreshDataAsync();
         var client = new HttpClient();
         var stream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
         var ms = new MemoryStream();
@@ -48,7 +62,7 @@ public partial class Overview
         _name = FetchService.Names[Id];
     }
 
-    public async Task CopyToClipboardAsync(string color)
+    private async Task CopyToClipboardAsync(string color)
     {
         await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", color);
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
@@ -74,5 +88,59 @@ public partial class Overview
         var dotnetStream = new DotNetStreamReference(fileStream);
         
         await JsRuntime.InvokeVoidAsync("downloadFileFromStream", $"{_name}.png", dotnetStream);
+    }
+
+    private async Task AddToCollectionAsync()
+    {
+        var utilityDb = await UtilityFactory.CreateDbContextAsync();
+        var authenticationState = await AuthenticationStateTask;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var user = utilityDb.Users.FirstOrDefault(x => x.Username == username);
+
+        if (user != null)
+        {
+            utilityDb.UsersCollections.Add(new UserCollection { Username = user.Username, PokemonId = Id });
+            await utilityDb.SaveChangesAsync();
+        }
+
+        await utilityDb.DisposeAsync();
+        await RefreshDataAsync();
+    }
+
+    private async Task RemoveFromCollectionAsync()
+    {
+        var utilityDb = await UtilityFactory.CreateDbContextAsync();
+        var authenticationState = await AuthenticationStateTask;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var user = utilityDb.Users.FirstOrDefault(x => x.Username == username);
+
+        if (user != null)
+        {
+            var collectionItem = utilityDb.UsersCollections.FirstOrDefault(x => x.Username == user.Username && x.PokemonId == Id);
+            if (collectionItem != null)
+            {
+                utilityDb.Remove(collectionItem);
+                await utilityDb.SaveChangesAsync();
+            }
+        }
+        
+        await utilityDb.DisposeAsync();
+        await RefreshDataAsync();
+    }
+
+    private async Task RefreshDataAsync()
+    {
+        var utilityDb = await UtilityFactory.CreateDbContextAsync();
+        var authenticationState = await AuthenticationStateTask;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var user = utilityDb.Users.AsNoTracking().FirstOrDefault(x => x.Username == username);
+        if (user != null)
+        {
+            _isConnected = true;
+            var alreadySaved = utilityDb.UsersCollections.AsNoTracking().FirstOrDefault(x => x.Username == user.Username && x.PokemonId == Id);
+            _canAddToCollection = alreadySaved is null;
+        }
+
+        await utilityDb.DisposeAsync();
     }
 }

@@ -3,7 +3,7 @@
     <MudStack Class="pt-1" Row="false" Spacing="0">
         <div class="d-flex mx-4" style="align-items: center;">
             <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">
-                @if (!_data!.ImagePfp)
+                @if (_data!.ImagePfp)
                 {
                     <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
                 }

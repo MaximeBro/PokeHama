@@ -175,7 +175,7 @@ table {
 }
 
 .tabpanel-bg {
-    backdrop-filter: blur(4px) brightness(.6)!important;
+    backdrop-filter: blur(4px) brightness(.35)!important;
     background: transparent!important;
 }
 

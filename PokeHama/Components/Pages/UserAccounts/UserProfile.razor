@@ -9,11 +9,18 @@
             <MudTabs Class="tabpanel-bg" Centered Outlined Rounded TabHeaderClass="tabpanel-bg" AlwaysShowScrollButtons="false" ActivePanelIndex="@SelectedTab">
                 @* Personal information *@
                 <MudTabPanel Class="text-white hoverable-square" Icon="@Icons.AccountCircle" Text="Votre espace">
-                    <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
+                    <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(20)!important; background: transparent!important;">
                         <MudStack Class="pt-2 pb-8" Row="false" Justify="Justify.Center" Spacing="0">
                             <MudStack Class="mb-2" Row Justify="Justify.Center">
                                 <MudBadge Class="hover-pointer" Icon="@Icons.Edit" Overlap Color="Color.Dark" OnClick="@EditPfpAsync" Bordered>
-                                    <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                                    @if (_data!.ImagePfp)
+                                    {
+                                        <MudImage Src="@($"/_content/pictures/PFP/{_data!.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                                    }
+                                    else
+                                    {
+                                        <MudAvatar Color="Color.Dark" Size="Size.Large">@_user!.Username[0]</MudAvatar>   
+                                    }
                                 </MudBadge>
                             </MudStack>
                             <MudText Class="text-white fffforwa" Align="Align.Center" GutterBottom>
@@ -37,8 +44,8 @@
 
                 @* Friends *@
                 <MudTabPanel Class="text-white hoverable-square" Icon="@Icons.PeopleAlt" Text="Amis">
-                    <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
-
+                    <MudPaper Class="px-8 py-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
+                        <MudAlert Severity="Severity.Info">Cette fonctionnalité arrive très bientôt !</MudAlert>
                     </MudPaper>
                 </MudTabPanel>
 

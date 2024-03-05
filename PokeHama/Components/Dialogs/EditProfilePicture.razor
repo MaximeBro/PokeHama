@@ -1,0 +1,65 @@
+﻿<MudDialog Class="tabpanel-bg">
+    <TitleContent>
+        <MudStack Class="mt-n2" Row AlignItems="AlignItems.Center" Spacing="0">
+            <MudText Typo="Typo.h6" Class="text-white pixelify">Modification de votre avatar</MudText>
+            <MudSpacer/>
+            <MudIconButton Class="text-white hoverable-circle mr-n4" Icon="@Icons.Close" OnClick="@(() => Dialog.Close())"/>
+        </MudStack>
+    </TitleContent>
+    <DialogContent>
+        <MudChipSet @bind-SelectedChip="_selectedChip" Mandatory Style="max-width: 350px;">
+            @for(int i=1; i < 7; i++)
+            {
+                int index = i;
+                @if (index == _selectedIndex)
+                {
+                    <MudChip Variant="Variant.Text" Color="Color.Dark" SelectedColor="Color.Info" Size="Size.Large" Default="true"
+                             Style="height: 58px!important; width: 58px!important; border-radius: 50%; padding: 4px!important;" Value="@index">
+                        <MudImage Src="@($"/_content/pictures/PFP/{index}.png")" Height="50" Style="border-radius: 50%;"/>
+                    </MudChip>
+                }
+                else
+                {
+                    <MudChip Variant="Variant.Text" Color="Color.Dark" SelectedColor="Color.Info" Size="Size.Large"
+                             Style="height: 58px!important; width: 58px!important; border-radius: 50%; padding: 4px!important;" Value="@index">
+                        <MudImage Src="@($"/_content/pictures/PFP/{index}.png")" Height="50" Style="border-radius: 50%;"/>
+                    </MudChip>
+                }
+            }
+            <MudChip Variant="Variant.Text" Color="Color.Dark" SelectedColor="Color.Info" Size="Size.Large"
+                     Style="height: 58px!important; width: 58px!important; border-radius: 50%; padding: 4px!important;" Value="-1">
+                <MudAvatar Class="ma-0 pa-0" Color="Color.Dark" Style="height: 50px!important; width: 50px!important;">@_userData.Username[0]</MudAvatar>
+            </MudChip>
+        </MudChipSet>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Tertiary" OnClick="@SubmitEdit">Enregistrer</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Inject] ISnackbar Snackbar { get; set; } = null!;
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public UserData UserData { get; set; } = null!;
+
+    private UserData _userData = null!;
+    private MudChip _selectedChip = null!;
+    private int _selectedIndex;
+
+    protected override void OnInitialized()
+    {
+        _userData = UserData;
+        _selectedIndex = int.Parse(_userData.Pfp.Replace(".png", string.Empty));
+    }
+
+    private void SubmitEdit()
+    {
+        var userData = new UserData { ImagePfp = false, Pfp = $"{_selectedChip.Value}.png" };
+        if ((int)_selectedChip.Value > 0)
+        {
+            userData.ImagePfp = true;
+        }
+
+        Dialog.Close(userData);
+    }
+}

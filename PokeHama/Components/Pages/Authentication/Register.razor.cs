@@ -68,7 +68,8 @@ public partial class Register
 			utilityDb.UsersData.Add(new UserData
 			{
 				Username = user.Username,
-				Pfp = $"{new Random().Next(1, 8)}.png"
+				Pfp = "-1.png",
+				ImagePfp = false
 			});
 			await utilityDb.SaveChangesAsync();
 			await utilityDb.DisposeAsync();

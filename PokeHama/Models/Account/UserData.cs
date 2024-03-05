@@ -13,7 +13,7 @@ public class UserData
     [MaxLength(10)] 
     public string Pfp { get; set; } = null!;
 
-    public bool ImagePfp { get; set; } = true;
+    public bool ImagePfp { get; set; }
     
     public AccountPrivacy AccountPrivacy { get; set; } = AccountPrivacy.Public;
 }

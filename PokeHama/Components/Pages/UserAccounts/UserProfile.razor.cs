@@ -62,7 +62,28 @@ public partial class UserProfile
 
     private async Task EditPfpAsync()
     {
-        var utilityDb = await UtilityFactory.CreateDbContextAsync(); 
+        var utilityDb = await UtilityFactory.CreateDbContextAsync();
+        var parameters = new DialogParameters<EditProfilePicture> { { x => x.UserData, _data } };
+        var dialog = await DialogService.ShowAsync<EditProfilePicture>(string.Empty, parameters, _dialogOptions);
+        var result = await dialog.Result;
+        if (result is { Data: UserData data })
+        {
+            var oldUserData = utilityDb.UsersData.AsTracking().FirstOrDefault(x => x.Username == _user!.Username);
+            if (oldUserData != null)
+            {
+                oldUserData.Pfp = data.Pfp;
+                oldUserData.ImagePfp = data.ImagePfp;
+                await utilityDb.SaveChangesAsync();
+            }
+            await utilityDb.DisposeAsync();
+            await RefreshDataAsync();
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            Snackbar.Add("Votre avatar a bien été mis à jour.", Severity.Success, options =>
+            {
+                options.VisibleStateDuration = 2000;
+                options.ShowCloseIcon = false;
+            });
+        }
     }
     
     private async Task EditRelativeNameAsync()

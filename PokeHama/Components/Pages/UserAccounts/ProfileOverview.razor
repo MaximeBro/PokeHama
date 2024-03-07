@@ -2,8 +2,8 @@
 
 <PageTitle>PokéHama</PageTitle>
 
-<section class="mud-grid profile-pika-bg" style="min-height: 100vh; width: 100%; justify-content: center; align-items: center; margin-top: -32px!important;">
-    <MudItem xs="12" sm="6" md="4">
+<section class="mud-grid profile-pika-bg" style="min-height: 100vh; width: 100%; justify-content: center; align-items: center;">
+    <MudItem Class="my-10 my-md-2" xs="12" sm="6" md="4">
         <MudPaper Class="centered-h rounded-lg px-8 pt-4" Elevation="20" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
             <MudStack Row="false" Justify="Justify.Center" Spacing="0">
                 <MudStack Row Justify="Justify.Center">
@@ -18,14 +18,24 @@
                         </MudTooltip>
                     }
                 </MudText>
-                <MudText Class="text-white fffforwa" Style="font-size: 10px;" Align="Align.Center" GutterBottom>51 ami(e)s</MudText>
+                <MudText Class="text-white fffforwa" Style="font-size: 10px;" Align="Align.Center" GutterBottom>@FriendsCount ami(e)s</MudText>
                 @if (_currentUser != null && _currentUser != Username)
                 {
                     <MudStack Class="mt-1" Row Justify="Justify.Center">
-                        <MudButton Class="fffforwa" StartIcon="@Icons.PersonAdd" IconSize="Size.Small" Size="Size.Small" Color="Color.Secondary" Variant="Variant.Filled" 
-                                   Style="text-transform: none!important; font-size: 8px;">
+                    @if (_areFriends)
+                    {
+                        <MudButton Class="fffforwa" StartIcon="@Icons.PersonRemove" IconSize="Size.Small" Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled" 
+                                   Style="text-transform: none!important; font-size: 8px;" OnClick="@RemoveFriendAsync">
                             Ami(e)
                         </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Class="fffforwa" StartIcon="@Icons.PersonAdd" IconSize="Size.Small" Size="Size.Small" Color="Color.Tertiary" Variant="Variant.Filled" 
+                                   Style="text-transform: none!important; font-size: 8px;" OnClick="@SendInviteAsync">
+                            Ami(e)
+                        </MudButton>
+                    }
                         <div>
                             <MudIconButton Class="text-white" Icon="@Icons.Share" Size="Size.Small" OnClick="@CopyToClipboardAsync"/>
                         </div>
@@ -35,11 +45,11 @@
                     <MudDivider Class="mx-auto" DividerType="DividerType.Middle" Style="max-width: 200px;" />
                 </div>
                 <MudText Class="text-white pixelify" Align="Align.Center" GutterBottom>Ce compte est @_isPublicText</MudText>
-                @if (_isPublic || (_currentUser != null && _currentUser == Username))
+                @if (_isPublic || (_currentUser != null && _currentUser == Username) || _areFriends)
                 {
                     <MudTabs Class="my-2" TabHeaderClass="tabpanel-bg" Outlined="false" Rounded Centered SliderColor="Color.Warning">
                         <MudTabPanel Class="tabpanel-tab white-tab fffforwa" Text="Collection" Style="font-size: 12px;">
-                            <MudGrid Class="my-4" Justify="Justify.Center" Style="max-height: 250px; overflow-y: scroll;">
+                            <MudGrid Class="my-4" Justify="Justify.Center" Style="max-height: 350px; overflow-y: auto;">
                                 @foreach (var pokemon in _collection)
                                 {
                                     <MudItem xs="6" sm="4" md="4" lg="4" xl="3">
@@ -54,7 +64,27 @@
                         </MudTabPanel>
                         
                         <MudTabPanel Class="tabpanel-tab white-tab fffforwa" Text="Amis" Style="font-size: 12px;">
-                            
+                            <MudStack Class="pt-6 pb-4 px-12" Row="false" Justify="Justify.Center" Style="overflow-y: auto; max-height: 350px;">
+                                @foreach (var friend in _friends)
+                                {
+                                    <MudStack Class="mb-2 mx-10 py-1 px-2 mud-elevation-5 rounded-lg yellow-bg" Row AlignItems="AlignItems.Center">
+                                        <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">
+                                            @if (friend.ImagePfp)
+                                            {
+                                                <MudImage Src="@($"/_content/pictures/PFP/{friend.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                                            }
+                                            else
+                                            {
+                                                @(friend.Username[0].ToString())
+                                            }
+                                        </MudAvatar>
+                                        <MudText Class="text-white ">@friend.Username</MudText>
+                                        <MudSpacer />
+                                        <MudIconButton Class="text-white" Size="Size.Small" Icon="@Icons.OpenInNew" 
+                                                       OnClick="@(() => NavManager.NavigateTo($"/profile-overview/{friend.Username}", true))" />
+                                    </MudStack>
+                                }
+                            </MudStack>
                         </MudTabPanel>
                     </MudTabs>
                 }

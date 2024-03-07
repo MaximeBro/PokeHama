@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
 using PokeHama.Databases;
+using PokeHama.Extensions;
 using PokeHama.Models.Account;
 using PokeHama.Models.Account.Enums;
 using PokeHama.Services;
@@ -14,6 +15,7 @@ namespace PokeHama.Components.Pages.UserAccounts;
 public partial class ProfileOverview
 {
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
+    [Inject] public RelationshipManager RelationshipManager { get; set; } = null!;
     [Inject] public FetchService FetchService { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
@@ -25,6 +27,10 @@ public partial class ProfileOverview
     private UserData? _data;
     private Dictionary<int, string> _collection = [];
     private string? _currentUser;
+    private bool _areFriends;
+
+    private int FriendsCount => _friends.Count;
+    private List<UserData> _friends;
 
     private bool _isPublic => _data?.AccountPrivacy == AccountPrivacy.Public || _data?.AccountPrivacy == AccountPrivacy.AdminPublic;
     private string _isPublicText => _isPublic ? "public" : "privé";
@@ -51,21 +57,32 @@ public partial class ProfileOverview
         Snackbar.Add("Lien copié dans le presse papier.", Severity.Success);
     }
 
-    private async Task AddFriendAsync()
+    private async Task SendInviteAsync()
     {
         await RefreshCurrentUserAsync();
-        if (_currentUser != null && _currentUser != Username)
+        if (_currentUser != null && _currentUser != Username && !_areFriends)
         {
-            
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            var canSend = await RelationshipManager.CanSendInviteAsync(_currentUser, Username!);
+            if (canSend)
+            {
+                await RelationshipManager.SendInviteAsync(_currentUser, Username!);
+                Snackbar.Add($"Invitation envoyée à {Username}.", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add($"Vous avez déjà envoyé une invitation à {Username}.", Severity.Warning);
+            }
         }
     }
 
     private async Task RemoveFriendAsync()
     {
         await RefreshCurrentUserAsync();
-        if (_currentUser != null && _currentUser != Username)
+        if (_currentUser != null && _currentUser != Username && _areFriends)
         {
-            
+            await RelationshipManager.RemoveFriendAsync(_currentUser, Username!);
+            await RefreshCurrentUserAsync();
         }
     }
 
@@ -73,5 +90,12 @@ public partial class ProfileOverview
     {
         var session = await AuthenticationStateTask;
         _currentUser = session.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
+        if (!string.IsNullOrWhiteSpace(_currentUser))
+        {
+            var utilityDb = await UtilityFactory.CreateDbContextAsync();
+            _areFriends = utilityDb.UsersRelationships.AreFriends(_currentUser, Username!);
+        }
+
+        _friends = await RelationshipManager.GetFriendsAsync(Username!);
     }
 }

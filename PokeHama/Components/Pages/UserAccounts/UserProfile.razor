@@ -4,9 +4,10 @@
 <PageTitle>PokéHama</PageTitle>
 
 <section class="mud-grid profile-pika-bg" style="min-height: 100vh; width: 100%; justify-content: center; align-items: center; margin-top: -32px!important;">
-    <MudItem xs="12" sm="6" md="4">
+    <MudItem Class="px-2 px-sm-2 px-md-0" xs="12" sm="12" md="10" lg="5" xl="4">
         <MudStack Row="false" Justify="Justify.Center">
-            <MudTabs Class="tabpanel-bg" Centered Outlined Rounded TabHeaderClass="tabpanel-bg" AlwaysShowScrollButtons="false" ActivePanelIndex="@SelectedTab">
+            <MudTabs Class="tabpanel-bg" SliderColor="Color.Warning" Centered Outlined Rounded TabHeaderClass="tabpanel-bg" ScrollIconColor="Color.Warning" 
+                     AlwaysShowScrollButtons="false" ActivePanelIndex="@SelectedTab">
                 @* Personal information *@
                 <MudTabPanel Class="text-white hoverable-square" Icon="@Icons.AccountCircle" Text="Votre espace">
                     <MudPaper Class="px-8 pt-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(20)!important; background: transparent!important;">
@@ -45,7 +46,58 @@
                 @* Friends *@
                 <MudTabPanel Class="text-white hoverable-square" Icon="@Icons.PeopleAlt" Text="Amis">
                     <MudPaper Class="px-8 py-4" Elevation="0" Outlined="false" Style="backdrop-filter: blur(2px) brightness(.6)!important; background: transparent!important;">
-                        <MudAlert Severity="Severity.Info">Cette fonctionnalité arrive très bientôt !</MudAlert>
+                        <MudStack Row="false" Justify="Justify.Center" Style="overflow-y: auto; max-height: 350px;">
+                            <MudText Class="text-white pixelify" Typo="Typo.h6">Invitations en attente</MudText>
+                            @foreach (var invite in _pendingInvites)
+                            {
+                                <MudStack Class="mb-2 mx-10 py-1 px-2 mud-elevation-5 rounded-lg" Row AlignItems="AlignItems.Center">
+                                    <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">
+                                        @if (invite.ImagePfp)
+                                        {
+                                            <MudImage Src="@($"/_content/pictures/PFP/{invite.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                                        }
+                                        else
+                                        {
+                                            @(invite.Username[0].ToString())
+                                        }
+                                    </MudAvatar>
+                                    <MudText Class="text-white ">@invite.Username</MudText>
+                                    <MudSpacer />
+                                    <MudButton StartIcon="@Icons.Close" Variant="Variant.Filled" Size="Size.Small" Style="text-transform: none; background: #eee;"
+                                               OnClick="@(async() => await DenyInviteAsync(invite.Username))">
+                                        Ignorer
+                                    </MudButton>
+                                    <MudButton StartIcon="@Icons.Check" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small" Style="text-transform: none;"
+                                               OnClick="@(async() => await AcceptInviteAsync(invite.Username))">
+                                        Accepter
+                                    </MudButton>
+                                </MudStack>
+                            }
+
+                            <MudText Class="text-white pixelify mt-4" Typo="Typo.h6">Amis</MudText>
+                            @foreach (var friend in _friends)
+                            {
+                                <MudStack Class="mb-2 mx-10 py-1 px-2 mud-elevation-5 rounded-lg yellow-bg" Row AlignItems="AlignItems.Center">
+                                    <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">
+                                        @if (friend.ImagePfp)
+                                        {
+                                            <MudImage Src="@($"/_content/pictures/PFP/{friend.Pfp}")" Height="50" Style="border-radius: 50%; user-select: none;"/>
+                                        }
+                                        else
+                                        {
+                                            @(friend.Username[0].ToString())
+                                        }
+                                    </MudAvatar>
+                                    <MudText Class="text-white ">@friend.Username</MudText>
+                                    <MudSpacer />
+                                    <MudButton StartIcon="@Icons.Close" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" Style="text-transform: none;"
+                                               OnClick="@(async() => await RemoveFriendAsync(friend.Username))">
+                                        Supprimer
+                                    </MudButton>
+                                    <MudIconButton Class="text-white" Icon="@Icons.OpenInNew" Href="@($"/profile-overview/{friend.Username}")" />
+                                </MudStack>
+                            }
+                        </MudStack>
                     </MudPaper>
                 </MudTabPanel>
 
@@ -65,7 +117,7 @@
                                 </span>.
                             </MudText>
                             <MudAlert Severity="Severity.Info">
-                                Si votre compte est privé, les autres utilisateurs ne pourront pas voir certaines de vos informations personnelles comme votre collection, votre nom, ...
+                                Si votre compte est privé, les autres utilisateurs ne pourront pas voir certaines de vos informations personnelles comme vos amis, votre collection ou votre nom.
                             </MudAlert>
                         </MudStack>
                     </MudPaper>

@@ -16,6 +16,7 @@ namespace PokeHama.Components.Pages.UserAccounts;
 public partial class UserProfile
 {
     [Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
+    [Inject] public RelationshipManager RelationshipManager { get; set; } = null!;
     [Inject] public UserService UserService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
     [Inject] public IDialogService DialogService { get; set; } = null!;
@@ -25,6 +26,9 @@ public partial class UserProfile
 
     private UserModel? _user;
     private UserData? _data;
+
+    private List<UserData> _pendingInvites = [];
+    private List<UserData> _friends = [];
 
     private AccountPrivacy _accountPrivacy;
     private bool IsPublic => _accountPrivacy.IsPublic();
@@ -146,6 +150,24 @@ public partial class UserProfile
         }
     }
 
+    private async Task AcceptInviteAsync(string from)
+    {
+        await RelationshipManager.AcceptFriendRequestAsync(from, _user!.Username);
+        await RefreshDataAsync();
+    }
+
+    private async Task DenyInviteAsync(string from)
+    {
+        await RelationshipManager.DenyFriendRequestAsync(from, _user!.Username);
+        await RefreshDataAsync();
+    }
+
+    private async Task RemoveFriendAsync(string to)
+    {
+        await RelationshipManager.RemoveFriendAsync(_user!.Username, to);
+        await RefreshDataAsync();
+    }
+    
     private async Task RefreshDataAsync(int tab = 0)
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
@@ -158,6 +180,9 @@ public partial class UserProfile
         {
             NavManager.NavigateTo("/", true);
         }
+        
+        _pendingInvites = await RelationshipManager.GetPendingInvitesAsync(username);
+        _friends = await RelationshipManager.GetFriendsAsync(username);
 
         _accountPrivacy = _data!.AccountPrivacy;
         SelectedTab = tab;

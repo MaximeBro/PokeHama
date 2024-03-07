@@ -20,8 +20,8 @@ public partial class Overview
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
     [Parameter] public int Id { get; set; }
 
-    private readonly List<string> _pixels = new();
-    private List<string> _palette = new();
+    private readonly List<string> _pixels = [];
+    private List<string> _palette = [];
     private SKBitmap _image = null!;
     private string _name = string.Empty;
 

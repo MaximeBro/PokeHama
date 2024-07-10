@@ -74,25 +74,26 @@
         <MudItem Class="px-4" xs="12" lg="2">
             <MudText Class="text-white pixelify ml-4" Typo="Typo.h5" GutterBottom>Actions</MudText>
             <MudStack Class="px-6 rounded" Row="false">
-                    @if (_isConnected)
-                    {
+                <AuthorizeView>
+                    <Authorized>
                         <div>
-                        @if (_canAddToCollection)
-                        {
-                            <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Style="background: #CE4A42;" Size="Size.Large"
-                                       StartIcon="@Icons.PlaylistAdd" OnClick="@AddToCollectionAsync">
-                                Enregistrer
-                            </MudButton>
-                        }
-                        else
-                        {
-                            <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Size="Size.Large" Color="Color.Success"
-                                       StartIcon="@Icons.PlaylistAddCheck" OnClick="@RemoveFromCollectionAsync">
-                                Enregistré
-                            </MudButton>
-                        }
+                            @if (_canAddToCollection)
+                            {
+                                <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Style="background: #CE4A42;" Size="Size.Large"
+                                           StartIcon="@Icons.PlaylistAdd" OnClick="@AddToCollectionAsync">
+                                    Enregistrer
+                                </MudButton>
+                            }
+                            else
+                            {
+                                <MudButton Class="rounded-xl text-white pixelify hoverable" Variant="Variant.Filled" Size="Size.Large" Color="Color.Success"
+                                           StartIcon="@Icons.PlaylistAddCheck" OnClick="@RemoveFromCollectionAsync">
+                                    Enregistré
+                                </MudButton>
+                            }
                         </div>
-                    }
+                    </Authorized>
+                </AuthorizeView>
                 <div class="my-1">
                     <MudButton Class="rounded-xl text-white pixelify" Variant="Variant.Filled" Color="Color.Tertiary" Size="Size.Large"
                                StartIcon="@Icons.Download" OnClick="@DownloadPngAsync">

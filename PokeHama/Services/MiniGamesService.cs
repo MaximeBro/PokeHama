@@ -4,7 +4,7 @@ namespace PokeHama.Services;
 
 public class MiniGamesService
 {
-	private List<string> _failGuessMessages = new();
+	private List<string> _failGuessMessages = [];
 
 	public Task InitAsync()
 	{

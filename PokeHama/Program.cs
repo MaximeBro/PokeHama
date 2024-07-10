@@ -9,6 +9,9 @@ using PokeHama.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 var pathToData = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../data/")).FullName;
+var pathToSettings = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../data/settings/")).FullName;
+
+builder.Configuration.AddJsonFile(Path.Combine(pathToSettings, "users.json"), optional: false, reloadOnChange: true);
 
 /* Authentication (start) */
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
@@ -17,7 +20,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/connexion";
 });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
 /* Authentication (end) */
 
 /* Databases (start) */
@@ -33,10 +35,13 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 /* Custom Services (start) */
+builder.Services.AddSingleton<StartupService>();
 builder.Services.AddSingleton<FetchService>();
 builder.Services.AddSingleton<MiniGamesService>();
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<UserTokenService>();
 builder.Services.AddScoped<RelationshipManager>();
+builder.Services.AddScoped<AuthenticationService>();
 /*Custom services (end) */
 
 var app = builder.Build();
@@ -50,7 +55,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
 app.UseAntiforgery();
@@ -58,7 +62,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict});
 
-app.MapControllers();
+app.UseLogin(); // Used as a mapped controller to manage user authentication
+app.UseLogout(); // Used as a mapped controller to manage user authentication
 app.UseUploading(); // Used to send to client files stored on the server-side
 
 app.MapRazorComponents<App>()
@@ -66,8 +71,10 @@ app.MapRazorComponents<App>()
 
 await RunMigrationAsync<UtilityContext>(app);
 
+var startupService = app.Services.GetRequiredService<StartupService>();
 var fetchService = app.Services.GetRequiredService<FetchService>();
 var minigamesService = app.Services.GetRequiredService<MiniGamesService>();
+await startupService.InitAsync();
 await fetchService.InitAsync();
 await minigamesService.InitAsync();
 

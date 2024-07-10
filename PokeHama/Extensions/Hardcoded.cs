@@ -1,7 +1,11 @@
+using System.Globalization;
+
 namespace PokeHama.Extensions;
 
 public static class Hardcoded
 {
+    public static readonly CultureInfo French = new CultureInfo("fr-FR");
+    
     public static readonly int IndexMax = 807;
     public static readonly string IconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/";
     public static readonly string FormUrl = "https://pokeapi.co/api/v2/pokemon-form/";

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PokeHama.Models.Account;
+using PokeHama.Models.Relationships;
 using PokeHama.Models.Account.Enums;
 
 namespace PokeHama.Extensions;

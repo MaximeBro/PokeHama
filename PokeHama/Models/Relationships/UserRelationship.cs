@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PokeHama.Models.Account;
+namespace PokeHama.Models.Relationships;
 
 public class UserRelationship
 {

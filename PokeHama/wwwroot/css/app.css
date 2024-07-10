@@ -67,7 +67,7 @@ html, body {
 }
 
 .hoverable-circle:hover {
-    background-color: rgba(0, 0, 0, .15)!important;
+    background-color: rgba(255, 255, 255, .15)!important;
     border-radius: 50%!important;
 }
 
@@ -199,6 +199,22 @@ table {
     border-color: white!important;
 }
 
+.datagrid-border * {
+    border-color: #424242!important;
+}
+
+.mud-breadcrumb-item * {
+    color: #fff!important;
+}
+
+.mud-breadcrumb-separator * {
+    color: #e4e4e4!important;
+}
+
+.mud-disabled * {
+    color: #c4c4c4!important;
+}
+
 .pika-wp {
     height: 100%!important;
     width: 100%!important;
@@ -207,6 +223,13 @@ table {
     transition: transform .5s ease;
     overflow-clip-margin: content-box;
     overflow: clip;
+}
+
+.pokehama-hub-bg {
+    background-image: url("../_content/pictures/pokehama-hub.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 .mammouth-bg {

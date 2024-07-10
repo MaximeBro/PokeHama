@@ -2,6 +2,11 @@
 
 <MudAppBar Fixed Class="yellow-bg">
     <MudIconButton Class="@_easterBallClass" Icon="@Hardcoded.PokeBallIcon" OnClick="@OnEasterBall" />
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <MudIconButton Class="ml-3 text-red" Icon="@Icons.AdminPanelSettings" Href="/back-office" />
+        </Authorized>
+    </AuthorizeView>
     <MudSpacer/>
     <MudButton Class="text-white mr-4 pixelify hoverable" Href="/">PokéHama</MudButton>
     <MudButton Class="text-white mr-4 pixelify hoverable" OnClick="@Random">Random</MudButton>

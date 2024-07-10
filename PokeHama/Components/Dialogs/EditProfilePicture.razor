@@ -28,7 +28,7 @@
             }
             <MudChip Variant="Variant.Text" Color="Color.Dark" SelectedColor="Color.Info" Size="Size.Large"
                      Style="height: 58px!important; width: 58px!important; border-radius: 50%; padding: 4px!important;" Value="-1">
-                <MudAvatar Class="ma-0 pa-0" Color="Color.Dark" Style="height: 50px!important; width: 50px!important;">@_userData.Username[0]</MudAvatar>
+                <MudAvatar Class="ma-0 pa-0" Color="Color.Dark" Style="height: 50px!important; width: 50px!important;">@_userData.Username[0].ToString().ToUpper()</MudAvatar>
             </MudChip>
         </MudChipSet>
     </DialogContent>

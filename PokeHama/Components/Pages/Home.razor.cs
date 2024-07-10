@@ -9,7 +9,7 @@ public partial class Home
     [Inject] public FetchService FetchService { get; set; } = null!;
     [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
 
-    private List<string> _pokemons = new();
+    private List<string> _pokemons = [];
     private bool _loading;
     private int _amountToDisplay = 151;
 

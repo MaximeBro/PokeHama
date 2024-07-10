@@ -1,3 +1,9 @@
+@if (_data is null || _user is null)
+{
+    <MudIconButton Class="icon-hoverable white-all pa-2" Size="Size.Small" Icon="@Icons.AccountCircle" OnClick="@Login" Style="border: 2px solid white; border-radius: 50%;"/>
+    return;
+}
+
 <MudMenu Class="icon-hoverable white-all pa-1" PopoverClass="transparent" ListClass="darker-bg rounded-lg" Size="Size.Small" Icon="@Icons.AccountCircle" Style="border: 2px solid white; border-radius: 50%;" 
          AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
     <MudStack Class="pt-1" Row="false" Spacing="0">
@@ -24,7 +30,7 @@
             <MudIcon Class="text-white mr-3" Icon="@Hardcoded.PokeBallIcon"/>
             Compte Hama
         </MudMenuItem>
-        <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
+        <MudDivider Class="my-2" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
         <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@CopyToClipboardAsync"><MudIcon Class="text-white mr-3" Icon="@Icons.Share" /> Partager</MudMenuItem>
         <MudMenuItem Class="my-0 text-white c-menu-item" OnClick="@Logout">
             <MudIcon Class="text-white mr-3" Icon="@Icons.Logout"/>
@@ -47,30 +53,30 @@
     protected override async Task OnInitializedAsync()
     {
         await RefreshDataAsync();
-
-        UserService.OnUserDataChanged += RefreshDataAsync;
     }
 
     private async Task RefreshDataAsync()
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var authenticationState = await AuthenticationStateTask;
-        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? string.Empty;
         _user = utilityDb.Users.FirstOrDefault(x => x.Username == username);
         _data = utilityDb.UsersData.FirstOrDefault(x => x.Username == username);
-
-        if (_user is null || _data is null)
-        {
-            NavManager.NavigateTo("/", true);
-        }
+        StateHasChanged();
     }
 
     private async Task CopyToClipboardAsync()
     {
-        await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"pokehama.fr/profile-overview/{_user!.Username}");
+        #if DEBUG
+            await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"https://localhost:7046/profile-overview/{_user!.Username}");
+        #else 
+            await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"pokehama.fr/profile-overview/{_user!.Username}");
+        #endif
+        
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-        Snackbar.Add("Lien copié dans le presse papier.", Severity.Success);
+        Snackbar.Add("Lien du profil copié dans le presse papier.", Severity.Success);
     }
 
-    private void Logout() => NavManager.NavigateTo("/api/authenticate/logout", true);
+    private void Login() => NavManager.NavigateTo("/connexion", true);
+    private void Logout() => NavManager.NavigateTo("/api/authentication/logout", true);
 }

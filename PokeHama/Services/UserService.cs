@@ -1,4 +1,6 @@
-﻿namespace PokeHama.Services;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace PokeHama.Services;
 
 public class UserService
 {

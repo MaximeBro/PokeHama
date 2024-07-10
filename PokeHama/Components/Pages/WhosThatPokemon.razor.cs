@@ -24,7 +24,7 @@ public partial class WhosThatPokemon
 
     private int _currentId = -1;
     private string _guess = string.Empty;
-    private string _blinkClass => _successOver ? "transparent" : "blink";
+    private string BlinkClass => _successOver ? "transparent" : "blink";
     private bool _successOver;
     private bool _displayMute;
 
@@ -56,14 +56,7 @@ public partial class WhosThatPokemon
         
         foreach (var pixel in _pixels)
         {
-            if (pixel != "#000000")
-            {
-                _colors.Add("rgba(120, 120, 120, .05)");
-            }
-            else
-            {
-                _colors.Add("#000000");
-            }
+            _colors.Add(pixel != "#000000" ? "rgba(120, 120, 120, .05)" : "#000000");
         }
     }
 

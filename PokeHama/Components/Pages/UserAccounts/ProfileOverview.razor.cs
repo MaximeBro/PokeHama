@@ -25,12 +25,12 @@ public partial class ProfileOverview
     
     private UserModel? _user;
     private UserData? _data;
-    private Dictionary<int, string> _collection = [];
+    private Dictionary<int, string> _collection = new();
     private string? _currentUser;
     private bool _areFriends;
 
     private int FriendsCount => _friends.Count;
-    private List<UserData> _friends;
+    private List<UserData> _friends = new();
 
     private bool _isPublic => _data?.AccountPrivacy == AccountPrivacy.Public || _data?.AccountPrivacy == AccountPrivacy.AdminPublic;
     private string _isPublicText => _isPublic ? "public" : "privé";
@@ -43,7 +43,7 @@ public partial class ProfileOverview
         _data = utilityDb.UsersData.FirstOrDefault(x => x.Username == Username);
         var collection = utilityDb.UsersCollections.AsNoTracking().Where(x => x.Username == Username).Select(x => x.PokemonId).ToList();
         _collection = FetchService.Pokemons.Where(x => collection.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value.Img);
-
+        
         if (_user is null || _data is null)
         {
             NavManager.NavigateTo("/", true);
@@ -89,7 +89,7 @@ public partial class ProfileOverview
     private async Task RefreshCurrentUserAsync()
     {
         var session = await AuthenticationStateTask;
-        _currentUser = session.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
+        _currentUser = session.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
         if (!string.IsNullOrWhiteSpace(_currentUser))
         {
             var utilityDb = await UtilityFactory.CreateDbContextAsync();

@@ -1,10 +1,12 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using PokeHama.Databases;
-using PokeHama.Models;
 using PokeHama.Models.Account;
 using PokeHama.Models.Account.Enums;
+using PokeHama.Services;
 using Timer = System.Timers.Timer;
 using BC = BCrypt.Net.BCrypt;
 
@@ -14,18 +16,19 @@ public partial class Register
 {
 	[Inject] public IDbContextFactory<UtilityContext> UtilityFactory { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
+	[Inject] public UserTokenService UserTokenService { get; set; } = null!;
 
 	private MudForm _form = null!;
 	private RegisterModel _model = new();
 	private bool _isValid;
 
 	private bool _passwordShown = false;
-	public string PasswordIcon => _passwordShown ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
-	public InputType PasswordInputType => _passwordShown ? InputType.Text : InputType.Password;
+	private string PasswordIcon => _passwordShown ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
+	private InputType PasswordInputType => _passwordShown ? InputType.Text : InputType.Password;
 	
 	private bool _confirmShown = false;
-	public string ConfirmIcon => _confirmShown ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
-	public InputType ConfirmInputType => _confirmShown ? InputType.Text : InputType.Password;
+	private string ConfirmIcon => _confirmShown ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
+	private InputType ConfirmInputType => _confirmShown ? InputType.Text : InputType.Password;
 	
 	private bool _errorMessage;
 	private string _errorMessageText = string.Empty;
@@ -43,7 +46,7 @@ public partial class Register
 			return;
 		}
 
-		var utilityDb = await UtilityFactory.CreateDbContextAsync();
+		await using var utilityDb = await UtilityFactory.CreateDbContextAsync();
 		var potentialUser = utilityDb.Users.FirstOrDefault(x => x.Username == _model.Username); 
 		if (potentialUser != null)
 		{
@@ -72,9 +75,20 @@ public partial class Register
 				ImagePfp = false
 			});
 			await utilityDb.SaveChangesAsync();
-			await utilityDb.DisposeAsync();
 			_loading = false;
-			NavManager.NavigateTo($"/api/authenticate/login?username={user.Username}&role={user.Role}", true);
+			StateHasChanged();
+			
+			var token = Guid.NewGuid();
+			Claim[] claims = new Claim[]
+			{
+				new Claim(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
+				new Claim(ClaimTypes.Name, user.Username),
+				new Claim(ClaimTypes.Role, user.Role.ToString())
+			};
+			var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+			
+			UserTokenService.Tokens.Add(token, new ClaimsPrincipal(identity));
+			NavManager.NavigateTo($"/api/authentication/login/{token}", true);
 		}
 	}
 

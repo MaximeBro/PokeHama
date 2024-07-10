@@ -89,12 +89,12 @@ public partial class Overview
         
         await JsRuntime.InvokeVoidAsync("downloadFileFromStream", $"{_name}.png", dotnetStream);
     }
-
+    
     private async Task AddToCollectionAsync()
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var authenticationState = await AuthenticationStateTask;
-        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? string.Empty;
         var user = utilityDb.Users.FirstOrDefault(x => x.Username == username);
 
         if (user != null)
@@ -111,7 +111,7 @@ public partial class Overview
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var authenticationState = await AuthenticationStateTask;
-        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? string.Empty;
         var user = utilityDb.Users.FirstOrDefault(x => x.Username == username);
 
         if (user != null)
@@ -132,7 +132,7 @@ public partial class Overview
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var authenticationState = await AuthenticationStateTask;
-        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var username = authenticationState.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? string.Empty;
         var user = utilityDb.Users.AsNoTracking().FirstOrDefault(x => x.Username == username);
         if (user != null)
         {

@@ -1,0 +1,27 @@
+@page "/back-office"
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>PokéHama - Administration</PageTitle>
+
+<section class="dark-bg" style="min-height: 100vh; width: 100%;">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudGrid Class="pt-6" Justify="Justify.Center" Spacing="5">
+            <MudItem xs="12">
+                <MudText Class="text-white pixelify" Typo="Typo.h3" Align="Align.Center">Administration du site</MudText>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudLink Href="/back-office/users" Underline="Underline.None">
+                    <MudPaper Class="px-6 py-3 darker-bg rounded-lg" Elevation="3">
+                        <MudStack Row="false">
+                            <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                                <MudIcon Class="text-white" Icon="@Icons.People"/>
+                                <MudText Class="text-white pixelify ml-3" Typo="Typo.h5">Gestion des utilisateurs</MudText>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+                </MudLink>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</section>

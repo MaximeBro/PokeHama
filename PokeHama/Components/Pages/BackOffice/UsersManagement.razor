@@ -1,0 +1,43 @@
+@page "/back-office/users"
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>PokéHama - Administration</PageTitle>
+
+<section class="dark-bg" style="min-height: 100vh; width: 100%;">
+    <MudPaper Class="px-2 light-bg" Elevation="0" Square>
+        <MudBreadcrumbs Class="pixelify" Items="@_breadcrumbs" Separator="/"/>
+    </MudPaper>
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudGrid Class="pt-6" Justify="Justify.Center" Spacing="5">
+            <MudItem xs="12">
+                <MudText Class="text-white pixelify" Typo="Typo.h3" Align="Align.Center">Gestion des utilisateurs</MudText>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudDataGrid T="UserModel" Items="@_users" QuickFilter="@QuickFilter" Bordered Culture="@Hardcoded.French" Elevation="1"
+                             FixedHeader Class="pixelify darker-bg text-white" Style="border-color: #fff!important;" RowClass="datagrid-border">
+                    <ToolBarContent>
+                        <MudText Class="pixelify text-white">Utilisateurs</MudText>
+                        <MudSpacer/>
+                        <MudTextField T="string" @bind-Value="_search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Search" Placeholder="Rechercher" Immediate
+                                      Class="flex-grow-0 flex-shrink-0 pixelify white-all" Style="min-width: 450px!important; margin-top: 0!important;"/>
+                    </ToolBarContent>
+                    <Columns>
+                        <PropertyColumn Title="@("@Identifiant")" Property="x => x.Username" Class="text-white" CellClass="pixelify text-white darker-bg" HeaderClass="pixelify text-white darker-bg"/>
+                        <PropertyColumn Title="Prénom" Property="x => x.FirstName" CellClass="pixelify text-white darker-bg" HeaderClass="pixelify text-white darker-bg"/>
+                        <PropertyColumn Title="Nom" Property="x => x.LastName" CellClass="pixelify text-white darker-bg" HeaderClass="pixelify text-white darker-bg"/>
+                        <PropertyColumn Title="Rôle" Property="x => x.Role" CellClass="pixelify text-white darker-bg" HeaderClass="pixelify text-white darker-bg"/>
+                        <PropertyColumn Title="Créé le" Property="x => x.CreatedAd" Format="dd-MM-yyyy à HH:mm:ss" CellClass="pixelify text-white darker-bg" HeaderClass="pixelify text-white darker-bg"/>
+                        <TemplateColumn>
+                            <CellTemplate>
+                                <MudStack>
+                                    
+                                </MudStack>
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                </MudDataGrid>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</section>

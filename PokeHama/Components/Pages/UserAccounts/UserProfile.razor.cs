@@ -62,7 +62,7 @@ public partial class UserProfile
                 await utilityDb.SaveChangesAsync();
             }
             await utilityDb.DisposeAsync();
-            NavManager.NavigateTo("api/authenticate/logout", true);
+            NavManager.NavigateTo("/api/authenticate/logout", true);
         }
     }
 
@@ -94,7 +94,7 @@ public partial class UserProfile
     
     private async Task EditRelativeNameAsync()
     {
-        var utilityDb = await UtilityFactory.CreateDbContextAsync();
+        await using var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var parameters = new DialogParameters<EditRelativeName> { { x => x.Firstname, _user!.FirstName }, { x => x.Lastname, _user!.LastName } };
         var dialog = await DialogService.ShowAsync<EditRelativeName>(string.Empty, parameters, _dialogOptions);
         var result = await dialog.Result;
@@ -105,9 +105,10 @@ public partial class UserProfile
             {
                 oldUser.FirstName = data["firstname"];
                 oldUser.LastName = data["lastname"];
+                utilityDb.Users.Update(oldUser);
                 await utilityDb.SaveChangesAsync();
             }
-            await utilityDb.DisposeAsync();
+            
             await RefreshDataAsync();
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
             Snackbar.Add("Vos données personnelles ont bien été mises à jour.", Severity.Success, options =>
@@ -133,6 +134,7 @@ public partial class UserProfile
                 await utilityDb.SaveChangesAsync();
             }
             await utilityDb.DisposeAsync();
+            Snackbar.Add("Vous devez vous reconnecter.", Severity.Info);
             NavManager.NavigateTo("api/authenticate/logout", true);
         }
     }
@@ -172,7 +174,7 @@ public partial class UserProfile
     {
         var utilityDb = await UtilityFactory.CreateDbContextAsync();
         var session = await AuthenticationStateTask;
-        var username = session.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value ?? string.Empty;
+        var username = session.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? string.Empty;
         
         _user = utilityDb.Users.AsNoTracking().FirstOrDefault(x => x.Username == username);
         _data = utilityDb.UsersData.AsNoTracking().FirstOrDefault(x => x.Username == username);

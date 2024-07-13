@@ -6,7 +6,7 @@
         <MudGrid Justify="Justify.Center" Spacing="0" Style="height: 90vh;">
             <MudItem xs="1"></MudItem>
             <MudItem xs="10">
-                <MudImage Class="mx-auto pixel-rendered" Src="@($"{Hardcoded.IconUrl}{Id}.png")"
+                <MudImage Class="mx-auto pixel-rendered" Src="@($"{Hardcoded.Pokemon.IconUrl}{Id}.png")"
                           Style="height:90vh; width: auto; position: relative; left: 50%; transform: translate(-50%);"/>
             </MudItem>
             <MudItem xs="1"></MudItem>
@@ -39,7 +39,7 @@
     private async Task DownloadPngAsync()
     {
         var client = new HttpClient();
-        var fileStream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
+        var fileStream = await client.GetStreamAsync($"{Hardcoded.Pokemon.IconUrl}{Id}.png");
         var dotnetStream = new DotNetStreamReference(fileStream);
         
         await JsRuntime.InvokeVoidAsync("downloadFileFromStream", $"{Name}.png", dotnetStream);

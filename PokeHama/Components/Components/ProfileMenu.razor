@@ -5,7 +5,7 @@
 }
 
 <MudMenu Class="icon-hoverable white-all pa-1" PopoverClass="transparent" ListClass="darker-bg rounded-lg" Size="Size.Small" Icon="@Icons.AccountCircle" Style="border: 2px solid white; border-radius: 50%;" 
-         AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+         AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ActivationEvent="MouseEvent.MouseOver">
     <MudStack Class="pt-1" Row="false" Spacing="0">
         <div class="d-flex mx-4" style="align-items: center;">
             <MudAvatar Class="mr-2" Variant="Variant.Filled" Color="Color.Dark">
@@ -15,7 +15,7 @@
                 }
                 else
                 {
-                    @(_user!.Username[0].ToString())
+                    @(_user!.Username[0].ToString().ToUpper())
                 }
             </MudAvatar>
             <div>
@@ -27,7 +27,7 @@
         </div>
         <MudDivider Class="my-2 mt-3" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
         <MudMenuItem Class="my-0 text-white c-menu-item" Href="/profile">
-            <MudIcon Class="text-white mr-3" Icon="@Hardcoded.PokeBallIcon"/>
+            <MudIcon Class="text-white mr-3" Icon="@Hardcoded.Pokemon.PokeBallIcon"/>
             Compte Hama
         </MudMenuItem>
         <MudDivider Class="my-2" DividerType="DividerType.FullWidth" Style="border-color: #424242!important;"/>
@@ -68,7 +68,7 @@
     private async Task CopyToClipboardAsync()
     {
         #if DEBUG
-            await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"https://localhost:7046/profile-overview/{_user!.Username}");
+            await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"{NavManager.BaseUri}profile-overview/{_user!.Username}");
         #else 
             await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"pokehama.fr/profile-overview/{_user!.Username}");
         #endif

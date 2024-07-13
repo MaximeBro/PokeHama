@@ -36,7 +36,7 @@ public partial class WhosThatPokemon
             _currentId = Id.Value;
         }
         var client = new HttpClient();
-        var stream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{_currentId}.png");
+        var stream = await client.GetStreamAsync($"{Hardcoded.Pokemon.IconUrl}{_currentId}.png");
         var ms = new MemoryStream();
         await stream.CopyToAsync(ms);
         ms.Position = 0;
@@ -122,7 +122,7 @@ public partial class WhosThatPokemon
     {
         _pixels.Clear();
         var client = new HttpClient();
-        var stream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{_currentId}.png");
+        var stream = await client.GetStreamAsync($"{Hardcoded.Pokemon.IconUrl}{_currentId}.png");
         var ms = new MemoryStream();
         await stream.CopyToAsync(ms);
         ms.Position = 0;

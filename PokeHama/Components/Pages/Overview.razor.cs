@@ -40,7 +40,7 @@ public partial class Overview
     {
         await RefreshDataAsync();
         var client = new HttpClient();
-        var stream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
+        var stream = await client.GetStreamAsync($"{Hardcoded.Pokemon.IconUrl}{Id}.png");
         var ms = new MemoryStream();
         await stream.CopyToAsync(ms);
         ms.Position = 0;
@@ -84,7 +84,7 @@ public partial class Overview
     private async Task DownloadPngAsync()
     {
         var client = new HttpClient();
-        var fileStream = await client.GetStreamAsync($"{Hardcoded.IconUrl}{Id}.png");
+        var fileStream = await client.GetStreamAsync($"{Hardcoded.Pokemon.IconUrl}{Id}.png");
         var dotnetStream = new DotNetStreamReference(fileStream);
         
         await JsRuntime.InvokeVoidAsync("downloadFileFromStream", $"{_name}.png", dotnetStream);

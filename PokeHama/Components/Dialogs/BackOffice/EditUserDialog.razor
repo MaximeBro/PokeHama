@@ -1,0 +1,75 @@
+﻿@using Humanizer
+<MudDialog Class="tabpanel-bg">
+    <TitleContent>
+        <MudStack Class="mt-n2" Row AlignItems="AlignItems.Center" Spacing="0">
+            <MudText Typo="Typo.h6" Class="text-white pixelify">@Title</MudText>
+            <MudSpacer />
+            <MudIconButton Class="text-white hoverable-circle mr-n4" Icon="@Icons.Close" OnClick="@(() => Dialog.Close())"/>
+        </MudStack>
+    </TitleContent>
+    <DialogContent>
+        <MudStack Row="false" Spacing="0">
+            <MudStack Class="mb-2" Row>
+                <MudTextField T="string" Class="white-all pixelify" @bind-Value="_firstname" Label="Prénom"/>
+                <MudTextField T="string" Class="white-all pixelify" @bind-Value="_lastname" Label="Nom"/>
+            </MudStack>
+            <MudStack Class="mb-2" Row>
+                <MudTextField T="string" Class="white-all pixelify" @bind-Value="@_password" Label="Mot de passe" InputType="@InputType" 
+                              Adornment="Adornment.End" AdornmentIcon="@AdornmentIcon" OnAdornmentClick="@(() => _shown = !_shown)"/>
+            </MudStack>
+            <MudStack Row>
+                <MudSelect T="UserRole" Class="white-all pixelify" @bind-Value="_role" Label="Rôle" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft"
+                           Style="min-width: 160px;">
+                    @foreach (var role in Enum.GetValues<UserRole>())
+                    {
+                        <MudSelectItem Value="@role">@role.Humanize()</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker Class="white-all pixelify" @bind-Date="_createdAt" Label="Créé le" DateFormat="dd-MM-yyyy" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft"/>
+            </MudStack>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Tertiary" Class="pixelify" Style="text-transform: none;" OnClick="@Submit">Valider</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public UserModel? User { get; set; }
+    
+    private string _firstname = string.Empty;
+    private string _lastname = string.Empty;
+    private string _password = string.Empty;
+    private UserRole _role = UserRole.User;
+    private DateTime? _createdAt;
+    
+    private bool _shown;
+    private InputType InputType => _shown ? InputType.Text : InputType.Password;
+    private string AdornmentIcon => _shown ? Icons.Visibility : Icons.VisibilityOff;
+
+    protected override void OnInitialized()
+    {
+        if (User != null)
+        {
+            _firstname = User.FirstName;
+            _lastname = User.LastName;
+            _role = User.Role;
+            _createdAt = User.CreatedAd;
+        }
+    }
+
+    private void Submit()
+    {
+        var user = new UserModel
+        {
+            FirstName = _firstname,
+            LastName = _lastname,
+            Password = _password,
+            Role = _role,
+            CreatedAd = _createdAt.GetValueOrDefault(DateTime.Now)
+        };
+        Dialog.Close(user);
+    }
+}

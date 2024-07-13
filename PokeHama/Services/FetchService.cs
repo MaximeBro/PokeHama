@@ -16,7 +16,7 @@ public class FetchService
     {
         var stream = File.OpenRead($"{Directory.GetCurrentDirectory()}\\Data\\pokemon_names.json");
         Names = JsonSerializer.Deserialize<Dictionary<int, string>>(stream)!;
-        for (int i = 1; i <= Hardcoded.IndexMax; i++)
+        for (int i = 1; i <= Hardcoded.Pokemon.IndexMax; i++)
         {
             Pokemons.Add(i, new PokemonData
             {

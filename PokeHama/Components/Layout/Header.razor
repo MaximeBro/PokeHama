@@ -1,10 +1,12 @@
 @using System.Timers
 
 <MudAppBar Fixed Class="yellow-bg">
-    <MudIconButton Class="@_easterBallClass" Icon="@Hardcoded.PokeBallIcon" OnClick="@OnEasterBall" />
+    <MudIconButton Class="@_easterBallClass" Icon="@Hardcoded.Pokemon.PokeBallIcon" OnClick="@OnEasterBall" />
     <AuthorizeView Roles="Admin">
         <Authorized>
-            <MudIconButton Class="ml-3 text-red" Icon="@Icons.AdminPanelSettings" Href="/back-office" />
+            <MudTooltip Text="Administration" Placement="Placement.Right" Arrow>
+                <MudIconButton Class="ml-4 text-red" Icon="@Icons.AdminPanelSettings" Href="/back-office"/>
+            </MudTooltip>
         </Authorized>
     </AuthorizeView>
     <MudSpacer/>
@@ -29,7 +31,7 @@
     [Inject] public NavigationManager NavManager { get; set; } = null!;
 
     private int _easterBall = 0;
-    private string _easterBallClass = "ball icon-hoverable";
+    private string _easterBallClass = "ball icon-hoverable text-white";
     private Timer _ballTimer = new Timer(2950);
 
     private void Random()
@@ -43,7 +45,7 @@
         _easterBall++;
         if (_easterBall % 5 == 0 && !_ballTimer.Enabled)
         {
-            _easterBallClass = "easter-ball icon-hoverable";
+            _easterBallClass = "easter-ball icon-hoverable text-white";
             _ballTimer.Elapsed += StopBallTimer;
             _ballTimer.Start();
         }
@@ -53,7 +55,7 @@
     {
         if (_ballTimer.Enabled)
         {
-            _easterBallClass = "ball";
+            _easterBallClass = "ball text-white";
             _ballTimer.Stop();
             _ballTimer.Elapsed -= StopBallTimer;
             _ = InvokeAsync(StateHasChanged);
